@@ -14,11 +14,11 @@ public class EntityController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityController.class);
 
-    @Autowired
-    HazelcastInstance hazelcastInstance;
+//    @Autowired
+//    HazelcastInstance hazelcastInstance;
 
     @RequestMapping(
-            value = "/{entity}",
+            value = "/entities",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -27,9 +27,6 @@ public class EntityController {
 
         LOG.debug("entity: {}", entity);
         LOG.debug("payload: {}", payload);
-
-        Map<Long, String> mapCustomers = hazelcastInstance.getMap("test");
-        mapCustomers.put(1L, entity);
 
         return null;
     }

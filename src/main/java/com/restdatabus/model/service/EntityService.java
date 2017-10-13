@@ -7,16 +7,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Handle persistence service for entities.
  */
-public class EntityService {
+public interface EntityService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EntityService.class);
-
-    public Entity create(Entity entity) {
-
-        LOG.debug("create: {}", entity);
-
-        entity.setId(System.currentTimeMillis());
-
-        return entity;
-    }
+    Entity create(Entity entity);
 }
