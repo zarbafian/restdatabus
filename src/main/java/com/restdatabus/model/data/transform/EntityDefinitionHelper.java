@@ -8,6 +8,27 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class EntityDefinitionHelper {
 
+    public static EntityDefinitionData persistToDvo(EntityDefinition entityDefinition) {
+
+        EntityDefinitionData data = new EntityDefinitionData();
+
+        data.setName(entityDefinition.getName());
+        for(FieldDefinition field: entityDefinition.getDefinitions()) {
+            data.getFields().add( persistToDvo(field) );
+        }
+
+        return data;
+    }
+
+    public static FieldDefinitionData persistToDvo(FieldDefinition field) {
+
+        FieldDefinitionData data = new FieldDefinitionData();
+        data.setName(field.getName());
+        data.setType(field.getType().getKey());
+
+        return data;
+    }
+
     public static EntityDefinition dvoToPersist(EntityDefinitionData data) {
 
         EntityDefinition entityDefinition = new EntityDefinition(data.getName());
@@ -24,7 +45,8 @@ public class EntityDefinitionHelper {
 
         FieldDefinition fieldDefinition;
 
-        DataType type = DataType.parse(data.getType());
+        DataType type = DataType.fromKey(data.getType());
+
         switch (type) {
             case INTEGER:
                 return new IntegerFieldDefinition(data.getName());

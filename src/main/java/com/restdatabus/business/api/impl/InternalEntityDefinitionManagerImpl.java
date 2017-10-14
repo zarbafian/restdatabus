@@ -59,8 +59,7 @@ public class InternalEntityDefinitionManagerImpl {
             persistedEntity.getDefinitions().add(persistedField);
         }
 
-        // TODO: transform back to DVO
-        EntityDefinitionData persistedData = null;
+        EntityDefinitionData persistedData = EntityDefinitionHelper.persistToDvo(persistedEntity);
 
         return persistedData;
     }

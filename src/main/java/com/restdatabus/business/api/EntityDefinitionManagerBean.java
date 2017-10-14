@@ -25,12 +25,6 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
     private AccessControlManager accessControlManager;
 
     @Autowired
-    private EntityDefinitionService entityDefinitionService;
-
-    @Autowired
-    private FieldDefinitionService fieldDefinitionService;
-
-    @Autowired
     private AccessControlManager securityManager;
 
     public EntityDefinitionData create(EntityDefinitionData data) {

@@ -26,7 +26,7 @@ public enum DataType {
         return key;
     }
 
-    public static DataType parse(String key) {
+    public static DataType fromKey(String key) {
         switch (key) {
             /**
              * List 2 / 2
