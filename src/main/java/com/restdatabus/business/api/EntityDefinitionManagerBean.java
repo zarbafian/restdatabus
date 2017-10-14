@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EntityDefinitionManagerBean implements EntityDefinitionManager {
 
@@ -45,5 +47,53 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         );
 
         return persistedData;
+    }
+
+    @Override
+    public EntityDefinitionData findByName(String name) {
+
+        LOG.debug("findByName: {}", name);
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions", // TODO: + "/" + name
+                Action.READ
+        );
+
+        EntityDefinitionData foundData = this.impl.findByName(name);
+
+        // Notify event
+        eventNotificationManager.push(
+                "/definitions", // TODO: + "/" + name
+                Action.READ,
+                foundData,
+                foundData
+        );
+
+        return foundData;
+    }
+
+    @Override
+    public List<EntityDefinitionData> findAll() {
+
+        LOG.debug("findAll");
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions",
+                Action.READ
+        );
+
+        List<EntityDefinitionData> foundData = this.impl.findAll();
+
+        // Notify event
+        eventNotificationManager.push(
+                "/definitions",
+                Action.READ,
+                foundData,
+                foundData
+        );
+
+        return foundData;
     }
 }

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Handle persistence service for entity definitions.
  */
@@ -30,6 +32,14 @@ public class EntityDefinitionServiceBean implements EntityDefinitionService {
 
         LOG.debug("findByName: {}", name);
 
-        return null;
+        return definitionDao.findByName(name);
+    }
+
+    @Override
+    public List<EntityDefinition> findAll() {
+
+        LOG.debug("findByName");
+
+        return definitionDao.findAll();
     }
 }

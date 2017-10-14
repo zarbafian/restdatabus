@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Transactional(
         propagation = Propagation.SUPPORTS,
         readOnly = true
@@ -62,5 +65,47 @@ public class InternalEntityDefinitionManagerImpl {
         EntityDefinitionData persistedData = EntityDefinitionHelper.persistToDvo(persistedEntity);
 
         return persistedData;
+    }
+
+    public EntityDefinitionData findByName(String name) {
+
+        LOG.debug("> findByName: {}", name);
+
+        EntityDefinition entityDefinition = entityDefinitionService.findByName(name);
+
+        if(entityDefinition == null) {
+
+            LOG.debug("< findByName: {} not found", name);
+            return null;
+        }
+
+        LOG.debug("< findByName: found {}", entityDefinition);
+        EntityDefinitionData entityDefinitionData = EntityDefinitionHelper.persistToDvo(entityDefinition);
+
+        return entityDefinitionData;
+    }
+
+    public List<EntityDefinitionData> findAll() {
+
+        LOG.debug("> findAll");
+
+        List<EntityDefinition> entityDefinitions = entityDefinitionService.findAll();
+
+        List<EntityDefinitionData> results = new ArrayList<EntityDefinitionData>();
+
+        LOG.debug("= findAll: found {} results", entityDefinitions.size());
+
+        if(entityDefinitions.size() == 0) {
+
+            return results;
+        }
+
+        for(EntityDefinition entityDefinition: entityDefinitions) {
+            results.add(
+                    EntityDefinitionHelper.persistToDvo(entityDefinition)
+            );
+        }
+
+        return results;
     }
 }
