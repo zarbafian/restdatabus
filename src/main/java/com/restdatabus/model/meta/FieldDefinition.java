@@ -4,9 +4,8 @@ import com.restdatabus.model.data.DataType;
 
 /**
  * The definition of a field.
- * @param <T> the data type associated with this definition.
  */
-public abstract class FieldDefinition<T> {
+public abstract class FieldDefinition {
 
     /**
      * The unique identifier of this field definition.

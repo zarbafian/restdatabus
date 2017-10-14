@@ -70,7 +70,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
 
         LOG.debug("= findByName - found: {}", results);
 
-        if(results.size() == 0) {
+        if(results.isEmpty()) {
             return null;
         }
 

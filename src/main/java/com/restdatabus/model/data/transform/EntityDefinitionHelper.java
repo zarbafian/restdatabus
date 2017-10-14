@@ -1,10 +1,8 @@
 package com.restdatabus.model.data.transform;
 
-import com.restdatabus.model.data.DataType;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
 import com.restdatabus.model.meta.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class EntityDefinitionHelper {
 

@@ -1,9 +1,10 @@
 package com.restdatabus.model.meta;
 
 import com.restdatabus.model.data.DataType;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class FieldDefinitionFactory {
+
+    private FieldDefinitionFactory(){}
 
     public static FieldDefinition buildFromKey(String key, String name) {
 
@@ -19,7 +20,7 @@ public class FieldDefinitionFactory {
             case DECIMAL:
                 return new DecimalFieldDefinition(name);
             default:
-                throw new NotImplementedException();
+                throw new IllegalArgumentException("field type '" + key + "' does not exist");
         }
     }
 }

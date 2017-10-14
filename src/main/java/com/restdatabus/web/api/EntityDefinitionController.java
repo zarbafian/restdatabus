@@ -27,13 +27,13 @@ public class EntityDefinitionController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public EntityDefinitionData create(@RequestBody EntityDefinitionData data) {
+    public ResponseEntity<EntityDefinitionData> create(@RequestBody EntityDefinitionData data) {
 
         LOG.debug("create: {}", data);
 
         EntityDefinitionData persistedData = manager.create(data);
 
-        return persistedData;
+        return new ResponseEntity<>(persistedData, HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -46,7 +46,7 @@ public class EntityDefinitionController {
 
         manager.deleteField(name, field);
 
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(
@@ -61,7 +61,7 @@ public class EntityDefinitionController {
 
         FieldDefinitionData updatedField = manager.updateField(name, field, data);
 
-        return new ResponseEntity<FieldDefinitionData>(updatedField, HttpStatus.OK);
+        return new ResponseEntity<>(updatedField, HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -76,7 +76,7 @@ public class EntityDefinitionController {
 
         FieldDefinitionData persistedData = manager.createField(name, data);
 
-        return new ResponseEntity<FieldDefinitionData>(persistedData, HttpStatus.OK);
+        return new ResponseEntity<>(persistedData, HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -91,7 +91,7 @@ public class EntityDefinitionController {
 
         EntityDefinitionData updatedData = manager.update(name, data);
 
-        return new ResponseEntity<EntityDefinitionData>(updatedData, HttpStatus.OK);
+        return new ResponseEntity<>(updatedData, HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -106,10 +106,10 @@ public class EntityDefinitionController {
         EntityDefinitionData foundData = manager.findByName(name);
 
         if(foundData == null) {
-            return new ResponseEntity<EntityDefinitionData>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<EntityDefinitionData>(foundData, HttpStatus.OK);
+        return new ResponseEntity<>(foundData, HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -122,7 +122,7 @@ public class EntityDefinitionController {
 
         manager.deleteByName(name);
 
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(
@@ -136,6 +136,6 @@ public class EntityDefinitionController {
 
         List<EntityDefinitionData> persistedData = manager.findAll();
 
-        return new ResponseEntity<List<EntityDefinitionData>>(persistedData, HttpStatus.OK);
+        return new ResponseEntity<>(persistedData, HttpStatus.OK);
     }
 }
