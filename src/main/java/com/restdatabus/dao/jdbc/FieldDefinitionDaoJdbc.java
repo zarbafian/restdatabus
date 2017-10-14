@@ -43,7 +43,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
         FieldDefinition persistedField = field.clone();
         persistedField.setId(newId.longValue());
 
-        LOG.debug("> insert: {}", persistedField);
+        LOG.debug("< insert: {}", persistedField);
 
         return persistedField;
     }

@@ -44,8 +44,8 @@ public enum DataType {
             case "data-type.entity":
                 return ENTITY;
             case "data-type.text":
-                default:
-                    return TEXT;
+                return TEXT;
+                default: throw new IllegalArgumentException("unknown data type '" + key + "'");
         }
     }
 

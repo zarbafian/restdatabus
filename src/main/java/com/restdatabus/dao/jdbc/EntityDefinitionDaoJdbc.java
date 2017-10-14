@@ -41,7 +41,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
         EntityDefinition persistedEntity = new EntityDefinition(entity.getName());
         persistedEntity.setId(newId.longValue());
 
-        LOG.debug("> insert: {}", persistedEntity);
+        LOG.debug("< insert: {}", persistedEntity);
 
         return persistedEntity;
     }
