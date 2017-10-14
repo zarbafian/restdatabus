@@ -14,6 +14,12 @@ public class EntityDefinitionData implements Serializable {
         this.fields = new ArrayList<>();
     }
 
+    public EntityDefinitionData(String name) {
+        this();
+        this.name = name;
+    }
+
+
     @Override
     public String toString() {
         return "EntityDefinitionData{" +

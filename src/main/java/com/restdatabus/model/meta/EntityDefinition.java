@@ -83,14 +83,12 @@ public class EntityDefinition {
         this.id = id;
     }
 
-    public EntityDefinition clone() {
-
-        EntityDefinition entity = new EntityDefinition(this.getName());
-        entity.setId(this.getId());
-        for(FieldDefinition field: this.getDefinitions()) {
-            entity.getDefinitions().add(new FieldDefinition(field));
+    public EntityDefinition(EntityDefinition entityDefinition) {
+        this.id = entityDefinition.getId();
+        this.name = entityDefinition.getName();
+        this.definitions = new ArrayList<>(entityDefinition.getDefinitions().size());
+        for(FieldDefinition fieldDefinition: entityDefinition.getDefinitions()) {
+            this.definitions.add(new FieldDefinition(fieldDefinition));
         }
-
-        return entity;
     }
 }

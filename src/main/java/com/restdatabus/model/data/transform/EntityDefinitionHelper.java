@@ -6,6 +6,8 @@ import com.restdatabus.model.meta.*;
 
 public class EntityDefinitionHelper {
 
+    private EntityDefinitionHelper(){}
+
     public static EntityDefinitionData persistToDvo(EntityDefinition entityDefinition) {
 
         EntityDefinitionData data = new EntityDefinitionData();
@@ -20,11 +22,7 @@ public class EntityDefinitionHelper {
 
     public static FieldDefinitionData persistToDvo(FieldDefinition field) {
 
-        FieldDefinitionData data = new FieldDefinitionData();
-        data.setName(field.getName());
-        data.setType(field.getType().getKey());
-
-        return data;
+        return new FieldDefinitionData(field.getName(), field.getType().getKey());
     }
 
     public static EntityDefinition dvoToPersist(EntityDefinitionData data) {
@@ -41,8 +39,6 @@ public class EntityDefinitionHelper {
 
     public static FieldDefinition dvoToPersist(FieldDefinitionData data) {
 
-        FieldDefinition fieldDefinition = FieldDefinitionFactory.buildFromKey(data.getType(),data.getName());
-
-        return fieldDefinition;
+        return FieldDefinitionFactory.buildFromKey(data.getType(),data.getName());
     }
 }

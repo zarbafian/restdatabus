@@ -8,6 +8,11 @@ public class FieldDefinitionData implements Serializable {
 
     private String type;
 
+    public FieldDefinitionData(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
+
     public String getName() {
         return name;
     }
