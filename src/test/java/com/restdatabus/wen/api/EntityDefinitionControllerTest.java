@@ -2,14 +2,16 @@ package com.restdatabus.wen.api;
 
 import static com.restdatabus.web.api.Constants.*;
 
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restdatabus.model.data.DataType;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
@@ -66,11 +68,12 @@ public class EntityDefinitionControllerTest {
         EntityDefinitionData data = new EntityDefinitionData();
         data.setName(product);
 
+        FieldDefinitionData ref = new FieldDefinitionData("reference", DataType.TEXT.getKey());
+        FieldDefinitionData price = new FieldDefinitionData("price", DataType.DECIMAL.getKey());
+        FieldDefinitionData qty = new FieldDefinitionData("quantity", DataType.INTEGER.getKey());
         data.setFields(
                 Arrays.asList(
-                        new FieldDefinitionData("reference", DataType.TEXT.getKey()),
-                        new FieldDefinitionData("price", DataType.DECIMAL.getKey()),
-                        new FieldDefinitionData("quantity", DataType.INTEGER.getKey())
+                        ref, price, qty
                 )
         );
 
@@ -81,6 +84,14 @@ public class EntityDefinitionControllerTest {
         mvc.perform( get( DEFINITIONS + "/" + product))
                 .andExpect( status().isOk() )
                 .andExpect ( jsonPath( "$.name", is(product )))
-                .andExpect ( jsonPath( "$.fields", hasSize( 3 )));
+                .andExpect ( jsonPath( "$.fields", hasSize( 3 )))
+                .andExpect ( jsonPath( "$.fields[0].name", is( data.getFields().get(0).getName() )))
+                .andExpect ( jsonPath( "$.fields[1].name", is( data.getFields().get(1).getName() )))
+                .andExpect ( jsonPath( "$.fields[2].name", is( data.getFields().get(2).getName() )));
+    }
+
+    private byte[] toJson(List<FieldDefinitionData> fieldDefinitionDatas) throws JsonProcessingException {
+
+        return new ObjectMapper().writeValueAsBytes(fieldDefinitionDatas);
     }
 }
