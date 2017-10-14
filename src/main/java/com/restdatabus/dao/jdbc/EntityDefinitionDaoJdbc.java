@@ -1,7 +1,9 @@
 package com.restdatabus.dao.jdbc;
 
 import com.restdatabus.dao.EntityDefinitionDao;
+import com.restdatabus.dao.FieldDefinitionDao;
 import com.restdatabus.model.meta.EntityDefinition;
+import com.restdatabus.model.meta.FieldDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ import java.util.Map;
 public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityDefinitionDaoJdbc.class);
+
+    @Autowired
+    private FieldDefinitionDao fieldDefinitionDao;
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -62,13 +67,22 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
                 new EntityDefinitionRowMapper()
         );
 
-        LOG.debug("< findByName: {}", results);
+
+        LOG.debug("= findByName - found: {}", results);
 
         if(results.size() == 0) {
             return null;
         }
 
-        return results.get(0);
+        EntityDefinition loadedEntity = results.get(0);
+
+        List<FieldDefinition> fieldDefinitions = fieldDefinitionDao.findByEntityDefinition(loadedEntity);
+
+        LOG.debug("= findByName - fields: {}", fieldDefinitions);
+
+        loadedEntity.setDefinitions(fieldDefinitions);
+
+        return loadedEntity;
     }
 
     @Override
@@ -88,7 +102,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
         return results;
     }
 
-    private static class EntityDefinitionRowMapper implements RowMapper<EntityDefinition> {
+    protected static class EntityDefinitionRowMapper implements RowMapper<EntityDefinition> {
 
         @Override
         public EntityDefinition mapRow(ResultSet resultSet, int i) throws SQLException {

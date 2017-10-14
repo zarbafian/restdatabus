@@ -43,19 +43,8 @@ public class EntityDefinitionHelper {
 
     public static FieldDefinition dvoToPersist(FieldDefinitionData data) {
 
-        FieldDefinition fieldDefinition;
+        FieldDefinition fieldDefinition = FieldDefinitionFactory.buildFromKey(data.getType(),data.getName());
 
-        DataType type = DataType.fromKey(data.getType());
-
-        switch (type) {
-            case INTEGER:
-                return new IntegerFieldDefinition(data.getName());
-            case YESNO:
-                return new YesNoFieldDefinition(data.getName());
-            case TEXT:
-                return new TextFieldDefinition(data.getName());
-                default:
-                    throw new NotImplementedException();
-        }
+        return fieldDefinition;
     }
 }

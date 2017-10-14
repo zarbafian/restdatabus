@@ -63,6 +63,10 @@ public class EntityDefinition {
         return definitions;
     }
 
+    public void setDefinitions(List<FieldDefinition> definitions) {
+        this.definitions = definitions;
+    }
+
     public Long getId() {
         return id;
     }

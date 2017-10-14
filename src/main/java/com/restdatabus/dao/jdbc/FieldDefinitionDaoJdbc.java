@@ -1,17 +1,26 @@
 package com.restdatabus.dao.jdbc;
 
 import com.restdatabus.dao.FieldDefinitionDao;
+import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
+import com.restdatabus.model.meta.FieldDefinitionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * DaoJdbc layer: perform database  interactions
+ */
 @Service
 public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
@@ -46,5 +55,39 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
         LOG.debug("< insert: {}", persistedField);
 
         return persistedField;
+    }
+
+    public List<FieldDefinition> findByEntityDefinition(EntityDefinition entityDefinition) {
+
+        LOG.debug("> findByEntityDefinition: {}", entityDefinition);
+
+        List<FieldDefinition> results = jdbcTemplate.query(
+
+                "SELECT fd.id, fd.name, fd.type, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=?",
+                new Object[]{ entityDefinition.getId() },
+                new FieldDefinitionRowMapper()
+        );
+
+        LOG.debug("< findByEntityDefinition: found {} field definitions(s)", results.size());
+
+        return results;
+    }
+
+    protected static class FieldDefinitionRowMapper implements RowMapper<FieldDefinition> {
+
+        @Override
+        public FieldDefinition mapRow(ResultSet resultSet, int i) throws SQLException {
+
+            Long id = resultSet.getLong(1);
+            String name = resultSet.getString(2);
+            String type = resultSet.getString(3);
+            Long entityDefId = resultSet.getLong(4);
+
+            FieldDefinition fieldDefinition = FieldDefinitionFactory.buildFromKey(type, name);
+            fieldDefinition.setId(id);
+            fieldDefinition.setEntityDefinitionId(entityDefId);
+
+            return fieldDefinition;
+        }
     }
 }
