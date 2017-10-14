@@ -102,6 +102,34 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
         return results;
     }
 
+    @Override
+    public void delete(Long id) {
+
+        LOG.debug("> delete");
+
+        jdbcTemplate.update(
+                "DELETE FROM entity_definition WHERE id=?",
+                new Object[] { id }
+        );
+
+        LOG.debug("< delete");
+    }
+
+    @Override
+    public EntityDefinition update(EntityDefinition entityDefinition) {
+
+        LOG.debug("> update: {}", entityDefinition);
+
+        jdbcTemplate.update(
+                "UPDATE entity_definition SET name=? WHERE id=?",
+                new Object[] { entityDefinition.getName(), entityDefinition.getId() }
+        );
+
+        LOG.debug("< update: {}", entityDefinition);
+
+        return entityDefinition;
+    }
+
     protected static class EntityDefinitionRowMapper implements RowMapper<EntityDefinition> {
 
         @Override

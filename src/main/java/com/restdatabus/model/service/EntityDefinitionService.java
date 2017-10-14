@@ -14,4 +14,8 @@ public interface EntityDefinitionService {
     EntityDefinition findByName(String name);
 
     List<EntityDefinition> findAll();
+
+    void delete(Long id);
+
+    EntityDefinition update(EntityDefinition entityDefinition);
 }

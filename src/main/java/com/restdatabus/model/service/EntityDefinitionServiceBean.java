@@ -42,4 +42,20 @@ public class EntityDefinitionServiceBean implements EntityDefinitionService {
 
         return definitionDao.findAll();
     }
+
+    @Override
+    public void delete(Long id) {
+
+        LOG.debug("delete");
+
+        definitionDao.delete(id);
+    }
+
+    @Override
+    public EntityDefinition update(EntityDefinition entityDefinition) {
+
+        LOG.debug("update");
+
+        return definitionDao.update(entityDefinition);
+    }
 }

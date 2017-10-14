@@ -1,6 +1,7 @@
 package com.restdatabus.model.service;
 
 import com.restdatabus.dao.FieldDefinitionDao;
+import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,4 +26,35 @@ public class FieldDefinitionServiceBean implements FieldDefinitionService {
         return definitionDao.insert(fieldDefinition);
     }
 
+    @Override
+    public void delete(Long id) {
+
+        LOG.debug("delete: {}", id);
+
+        definitionDao.delete(id);
+    }
+
+    @Override
+    public void deleteByEntityDefinition(Long id) {
+
+        LOG.debug("deleteByEntityDefinition: {}", id);
+
+        definitionDao.deleteByEntityDefinition(id);
+    }
+
+    @Override
+    public FieldDefinition update(FieldDefinition fieldDefinition) {
+
+        LOG.debug("update: {}", fieldDefinition);
+
+        return definitionDao.update(fieldDefinition);
+    }
+
+    @Override
+    public FieldDefinition findByDefinitionAndName(Long entityDefinitionId, String fieldName) {
+
+        LOG.debug("findByDefinitionAndName: {} -> {}", entityDefinitionId, fieldName);
+
+        return definitionDao.findByDefinitionAndName(entityDefinitionId, fieldName);
+    }
 }

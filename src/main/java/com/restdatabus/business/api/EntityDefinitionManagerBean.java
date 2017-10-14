@@ -3,8 +3,7 @@ package com.restdatabus.business.api;
 import com.restdatabus.authorization.Action;
 import com.restdatabus.business.api.impl.InternalEntityDefinitionManagerImpl;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
-import com.restdatabus.model.service.EntityDefinitionService;
-import com.restdatabus.model.service.FieldDefinitionService;
+import com.restdatabus.model.data.dvo.FieldDefinitionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +28,7 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
     @Autowired
     private AccessControlManager securityManager;
 
+    @Override
     public EntityDefinitionData create(EntityDefinitionData data) {
 
         LOG.debug("create: {}", data);
@@ -47,6 +47,124 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         );
 
         return persistedData;
+    }
+
+    @Override
+    public EntityDefinitionData update(String name, EntityDefinitionData data) {
+
+        LOG.debug("update: {}", name, data);
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions", // TODO: + "/" + name
+                Action.UPDATE
+        );
+
+        EntityDefinitionData existingData = this.impl.findByName(name);
+
+        if(existingData == null) {
+
+            String msg = "update - entity '" + name + "' does not exist";
+            LOG.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+
+        EntityDefinitionData updatedData = this.impl.update(existingData, data);
+
+        boolean dataChanged = !existingData.equals(updatedData);
+
+        if(dataChanged) {
+
+            // Notify event
+            eventNotificationManager.push(
+                    "/definitions", // TODO: + "/" + name
+                    Action.UPDATE,
+                    data,
+                    updatedData
+            );
+        }
+
+        return updatedData;
+    }
+
+    @Override
+    public FieldDefinitionData createField(String name, FieldDefinitionData data) {
+
+        LOG.debug("createField: {} -> {}", name, data);
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions", // TODO: + "/" + name/fields
+                Action.CREATE
+        );
+
+        FieldDefinitionData fieldDefinitionData = this.impl.createField(name, data);
+
+        // Notify event
+        eventNotificationManager.push(
+                "/definitions", // TODO: + "/" + name/fields
+                Action.CREATE,
+                null,
+                fieldDefinitionData // TODO: + name?
+        );
+
+        return null;
+    }
+
+    @Override
+    public FieldDefinitionData updateField(String name, String field, FieldDefinitionData newData) {
+
+        LOG.debug("createField: {} -> {}", name, newData);
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions", // TODO: + "/" + name/fields/data.name
+                Action.UPDATE
+        );
+
+        FieldDefinitionData existingField = this.impl.findByNameAndDefinition(name, field);
+
+        FieldDefinitionData updatedData = this.impl.updateField(name, field, newData);
+
+        boolean dataChanged = !existingField.equals(updatedData);
+
+        if(dataChanged) {
+
+            // Notify event
+            eventNotificationManager.push(
+                    "/definitions", // TODO: + "/" + name/fields/data.name
+                    Action.UPDATE,
+                    existingField,
+                    updatedData // TODO: + name?
+            );
+        }
+
+        return updatedData;
+    }
+
+    @Override
+    public void deleteField(String name, String field) {
+
+        LOG.debug("deleteField: {} -> {}", name, field);
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions", // TODO: + "/" + name/fields/data.name
+                Action.DELETE
+        );
+
+        boolean deleted = this.impl.deleteField(name, field);
+
+        if(deleted) {
+
+            // Notify event
+            eventNotificationManager.push(
+                    "/definitions", // TODO: + "/" + name/fields/data.name
+                    Action.DELETE,
+                    name + "." + field, // TODO
+                    null
+            );
+        }
     }
 
     @Override
@@ -95,5 +213,30 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         );
 
         return foundData;
+    }
+
+    @Override
+    public void deleteByName(String name) {
+
+        LOG.debug("deleteByName: {}", name);
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions", // TODO: + "/" + name
+                Action.DELETE
+        );
+
+        boolean deleted = this.impl.deleteByName(name);
+
+        if (deleted) {
+
+            // Notify event
+            eventNotificationManager.push(
+                    "/definitions", // TODO: + "/" + name
+                    Action.DELETE,
+                    name,
+                    null
+            );
+        }
     }
 }

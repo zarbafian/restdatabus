@@ -73,6 +73,68 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
         return results;
     }
 
+    @Override
+    public void delete(Long id) {
+
+        LOG.debug("> delete: {}", id);
+
+        jdbcTemplate.update(
+                "DELETE FROM field_definition WHERE id=?",
+                new Object[] { id }
+        );
+
+        LOG.debug("< delete: {}", id);
+    }
+
+    @Override
+    public void deleteByEntityDefinition(Long id) {
+
+        LOG.debug("> deleteByEntityDefinition: {}", id);
+
+        jdbcTemplate.update(
+                "DELETE FROM field_definition WHERE entity_definition_id=?",
+                new Object[] { id }
+        );
+
+        LOG.debug("< deleteByEntityDefinition: {}", id);
+    }
+
+    @Override
+    public FieldDefinition update(FieldDefinition fieldDefinition) {
+
+        LOG.debug("> update: {}", fieldDefinition);
+
+        jdbcTemplate.update(
+                "UPDATE field_definition SET name=?, type=? WHERE id=?",
+                new Object[] { fieldDefinition.getName(), fieldDefinition.getType().getKey(), fieldDefinition.getId() }
+        );
+
+        LOG.debug("< update: {}", fieldDefinition);
+
+        return fieldDefinition;
+    }
+
+    @Override
+    public FieldDefinition findByDefinitionAndName(Long entityDefinitionId, String fieldName) {
+
+        LOG.debug("> findByDefinitionAndName: {} -> {}", entityDefinitionId, fieldName);
+
+        List<FieldDefinition> results = jdbcTemplate.query(
+
+                "SELECT fd.id, fd.name, fd.type, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=? AND fd.name=?",
+                new Object[]{ entityDefinitionId, fieldName },
+                new FieldDefinitionRowMapper()
+        );
+
+        LOG.debug("< findByDefinitionAndName: found {} field definitions(s)", results.size());
+
+        if(results.size() == 0) {
+            return null;
+        }
+
+        return results.get(0);
+    }
+
     protected static class FieldDefinitionRowMapper implements RowMapper<FieldDefinition> {
 
         @Override
