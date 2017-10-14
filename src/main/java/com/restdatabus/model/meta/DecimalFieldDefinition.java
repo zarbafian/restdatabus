@@ -9,12 +9,4 @@ public class DecimalFieldDefinition extends FieldDefinition
         super(name, DataType.DECIMAL);
     }
 
-    @Override
-    public FieldDefinition clone() {
-        FieldDefinition field = new DecimalFieldDefinition(this.getName());
-        field.setId(this.getId());
-        field.setType(this.getType());
-        field.setEntityDefinitionId(this.getEntityDefinitionId());
-        return field;
-    }
 }

@@ -11,12 +11,4 @@ public class YesNoFieldDefinition extends FieldDefinition {
         super(name, DataType.YESNO);
     }
 
-    @Override
-    public FieldDefinition clone() {
-        FieldDefinition field = new YesNoFieldDefinition(this.getName());
-        field.setId(this.getId());
-        field.setType(this.getType());
-        field.setEntityDefinitionId(this.getEntityDefinitionId());
-        return field;
-    }
 }

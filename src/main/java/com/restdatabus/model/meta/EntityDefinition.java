@@ -88,7 +88,7 @@ public class EntityDefinition {
         EntityDefinition entity = new EntityDefinition(this.getName());
         entity.setId(this.getId());
         for(FieldDefinition field: this.getDefinitions()) {
-            entity.getDefinitions().add(field.clone());
+            entity.getDefinitions().add(new FieldDefinition(field));
         }
 
         return entity;

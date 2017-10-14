@@ -8,12 +8,4 @@ public class IntegerFieldDefinition extends FieldDefinition {
         super(name, DataType.INTEGER);
     }
 
-    @Override
-    public FieldDefinition clone() {
-        FieldDefinition field = new IntegerFieldDefinition(this.getName());
-        field.setId(this.getId());
-        field.setType(this.getType());
-        field.setEntityDefinitionId(this.getEntityDefinitionId());
-        return field;
-    }
 }

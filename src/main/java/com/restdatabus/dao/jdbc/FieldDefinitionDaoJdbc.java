@@ -49,7 +49,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
         parameters.put("entity_definition_id", field.getEntityDefinitionId());
         Number newId = insertFieldDefinition.executeAndReturnKey(parameters);
 
-        FieldDefinition persistedField = field.clone();
+        FieldDefinition persistedField = new FieldDefinition(field);
         persistedField.setId(newId.longValue());
 
         LOG.debug("< insert: {}", persistedField);

@@ -8,12 +8,4 @@ public class TextFieldDefinition extends FieldDefinition {
         super(name, DataType.TEXT);
     }
 
-    @Override
-    public FieldDefinition clone() {
-        FieldDefinition field = new TextFieldDefinition(this.getName());
-        field.setId(this.getId());
-        field.setType(this.getType());
-        field.setEntityDefinitionId(this.getEntityDefinitionId());
-        return field;
-    }
 }

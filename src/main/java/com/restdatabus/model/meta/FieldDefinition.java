@@ -5,7 +5,7 @@ import com.restdatabus.model.data.DataType;
 /**
  * The definition of a field.
  */
-public abstract class FieldDefinition {
+public class FieldDefinition {
 
     /**
      * The unique identifier of this field definition.
@@ -32,6 +32,13 @@ public abstract class FieldDefinition {
         this.name = name;
     }
 
+    public FieldDefinition(FieldDefinition definition) {
+        this.id = definition.getId();
+        this.name = definition.getName();
+        this.type = definition.getType();
+        this.setEntityDefinitionId(definition.getEntityDefinitionId());
+    }
+
     @Override
     public String toString() {
         return "FieldDefinition{" +
@@ -41,8 +48,6 @@ public abstract class FieldDefinition {
                 ", entityDefinitionId=" + entityDefinitionId +
                 '}';
     }
-
-    public abstract FieldDefinition clone();
 
     public Long getId() {
         return id;

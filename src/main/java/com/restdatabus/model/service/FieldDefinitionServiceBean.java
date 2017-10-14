@@ -1,7 +1,6 @@
 package com.restdatabus.model.service;
 
 import com.restdatabus.dao.FieldDefinitionDao;
-import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
