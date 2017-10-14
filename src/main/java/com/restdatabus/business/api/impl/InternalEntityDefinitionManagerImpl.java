@@ -66,9 +66,7 @@ public class InternalEntityDefinitionManagerImpl {
             persistedEntity.getDefinitions().add(persistedField);
         }
 
-        EntityDefinitionData persistedData = EntityDefinitionHelper.persistToDvo(persistedEntity);
-
-        return persistedData;
+        return EntityDefinitionHelper.persistToDvo(persistedEntity);
     }
 
     @Transactional(
@@ -130,9 +128,7 @@ public class InternalEntityDefinitionManagerImpl {
         // Update entity
         EntityDefinition updatedEntity = entityDefinitionService.update(existingDefinition);
 
-        EntityDefinitionData updatedData = EntityDefinitionHelper.persistToDvo(updatedEntity);
-
-        return updatedData;
+        return EntityDefinitionHelper.persistToDvo(updatedEntity);
     }
 
     @Transactional(
@@ -168,9 +164,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("< createField: {} -> {}", name, persistedField);
 
-        FieldDefinitionData persistedData = EntityDefinitionHelper.persistToDvo(persistedField);
-
-        return persistedData;
+        return EntityDefinitionHelper.persistToDvo(persistedField);
     }
 
 
@@ -227,9 +221,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("< updateField: {} -> {}", name, updatedField);
 
-        FieldDefinitionData updatedData = EntityDefinitionHelper.persistToDvo(updatedField);
-
-        return updatedData;
+        return EntityDefinitionHelper.persistToDvo(updatedField);
     }
 
     @Transactional(
@@ -278,9 +270,7 @@ public class InternalEntityDefinitionManagerImpl {
         }
 
         LOG.debug("< findByName: found {}", entityDefinition);
-        EntityDefinitionData entityDefinitionData = EntityDefinitionHelper.persistToDvo(entityDefinition);
-
-        return entityDefinitionData;
+        return EntityDefinitionHelper.persistToDvo(entityDefinition);
     }
 
     public List<EntityDefinitionData> findAll() {
@@ -289,11 +279,11 @@ public class InternalEntityDefinitionManagerImpl {
 
         List<EntityDefinition> entityDefinitions = entityDefinitionService.findAll();
 
-        List<EntityDefinitionData> results = new ArrayList<EntityDefinitionData>();
+        List<EntityDefinitionData> results = new ArrayList<>();
 
         LOG.debug("= findAll: found {} results", entityDefinitions.size());
 
-        if(entityDefinitions.size() == 0) {
+        if(entityDefinitions.isEmpty()) {
 
             return results;
         }
@@ -331,8 +321,6 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("< findByNameAndDefinition: found {}", entityDefinition);
 
-        FieldDefinitionData fieldDefinitionData = EntityDefinitionHelper.persistToDvo(fieldDefinition);
-
-        return fieldDefinitionData;
+        return EntityDefinitionHelper.persistToDvo(fieldDefinition);
     }
 }
