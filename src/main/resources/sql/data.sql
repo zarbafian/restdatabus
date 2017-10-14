@@ -23,3 +23,24 @@ INSERT INTO account_role (account_id, role_id) SELECT a.id, r.id FROM account a,
 
 -- role User for poz
 INSERT INTO account_role (account_id, role_id) SELECT a.id, r.id FROM account a, role r WHERE a.username = 'poz' and r.id = 1;
+
+
+-- Test data
+
+-- entity definitions
+INSERT INTO entity_definition (name) VALUES ('customer');
+INSERT INTO entity_definition (name) VALUES ('product');
+INSERT INTO entity_definition (name) VALUES ('invoice');
+
+-- field definitions
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'firstname' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'customer';
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'laststname' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'customer';
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'address' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'customer';
+
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'reference' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'product';
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'price' , 'data-type.decimal', ed.id FROM entity_definition ed WHERE ed.name = 'product';
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'quantity' , 'data-type.integer', ed.id FROM entity_definition ed WHERE ed.name = 'product';
+
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'amount' , 'data-type.decimal', ed.id FROM entity_definition ed WHERE ed.name = 'invoice';
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'customer' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'invoice';
+INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'paid' , 'data-type.yesno', ed.id FROM entity_definition ed WHERE ed.name = 'invoice';
