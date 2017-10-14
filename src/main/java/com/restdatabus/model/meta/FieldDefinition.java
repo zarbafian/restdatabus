@@ -23,6 +23,10 @@ public abstract class FieldDefinition<T> {
      */
     private DataType type;
 
+    /**
+     * The identifier of the entity definition to which the field pertains.
+     */
+    private Long entityDefinitionId;
 
     public FieldDefinition(String name, DataType type) {
         this.type = type;
@@ -32,8 +36,44 @@ public abstract class FieldDefinition<T> {
     @Override
     public String toString() {
         return "FieldDefinition{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", type=" + type +
+                ", entityDefinitionId=" + entityDefinitionId +
                 '}';
+    }
+
+    public abstract FieldDefinition clone();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public DataType getType() {
+        return type;
+    }
+
+    public void setType(DataType type) {
+        this.type = type;
+    }
+
+    public Long getEntityDefinitionId() {
+        return entityDefinitionId;
+    }
+
+    public void setEntityDefinitionId(Long entityDefinitionId) {
+        this.entityDefinitionId = entityDefinitionId;
     }
 }

@@ -74,4 +74,15 @@ public class EntityDefinition {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public EntityDefinition clone() {
+
+        EntityDefinition entity = new EntityDefinition(this.getName());
+        entity.setId(this.getId());
+        for(FieldDefinition field: this.getDefinitions()) {
+            entity.getDefinitions().add(field.clone());
+        }
+
+        return entity;
+    }
 }

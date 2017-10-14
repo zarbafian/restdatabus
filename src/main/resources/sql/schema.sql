@@ -95,3 +95,38 @@ WITH (
 ALTER TABLE account_role
   OWNER TO restdatabus;
 
+------------------------------------------------------------
+---------------------- Business tables----------------------
+------------------------------------------------------------
+
+-- entity_definition
+CREATE TABLE entity_definition
+(
+  id bigserial NOT NULL,
+  name character varying NOT NULL,
+  CONSTRAINT pk_entity_definition PRIMARY KEY (id),
+  CONSTRAINT uq_entity_definition_name UNIQUE (name)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE entity_definition
+  OWNER TO restdatabus;
+
+-- field_definition
+CREATE TABLE field_definition
+(
+  id bigserial NOT NULL,
+  name character varying NOT NULL,
+  type character varying NOT NULL,
+  entity_definition_id bigint NOT NULL,
+  CONSTRAINT pk_field_definition_id PRIMARY KEY (id),
+  CONSTRAINT fk_entity_definition_id FOREIGN KEY (entity_definition_id)
+      REFERENCES entity_definition (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE field_definition
+  OWNER TO restdatabus;

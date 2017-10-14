@@ -4,7 +4,9 @@ import com.restdatabus.authorization.Action;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.transform.EntityDefinitionHelper;
 import com.restdatabus.model.meta.EntityDefinition;
+import com.restdatabus.model.meta.FieldDefinition;
 import com.restdatabus.model.service.EntityDefinitionService;
+import com.restdatabus.model.service.FieldDefinitionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
 
     @Autowired
     private EntityDefinitionService entityDefinitionService;
+
+    @Autowired
+    private FieldDefinitionService fieldDefinitionService;
 
     @Autowired
     private AccessControlManager securityManager;
@@ -46,15 +51,22 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         // Transform to a persistable form
         entityDefinition = EntityDefinitionHelper.dvoToPersist(data);
 
-        // Persist
-        EntityDefinition persisted = entityDefinitionService.create(entityDefinition);
+        // Persist entity
+        EntityDefinition persistedEntity = entityDefinitionService.create(entityDefinition);
+
+        // Persist fields
+        for(FieldDefinition field: entityDefinition.getDefinitions()) {
+            field.setEntityDefinitionId(persistedEntity.getId());
+            FieldDefinition persistedField = fieldDefinitionService.create(field);
+            persistedEntity.getDefinitions().add(persistedField);
+        }
 
         // Notify event
         eventNotificationManager.push(
                 "/definitions",
                 Action.CREATE,
                 null,
-                persisted
+                persistedEntity
         );
 
         // TODO: transform back to DVO

@@ -22,6 +22,10 @@ public enum DataType {
         this.key = key;
     }
 
+    public String getKey() {
+        return key;
+    }
+
     public static DataType parse(String key) {
         switch (key) {
             /**
