@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * DaoJdbc layer: perform database  interactions
+ * DaoJdbc layer: perform database interactions
  */
 @Service
 public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {

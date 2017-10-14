@@ -307,7 +307,6 @@ public class InternalEntityDefinitionManagerImpl {
         return results;
     }
 
-    // TODO: remove?
     public FieldDefinitionData findByNameAndDefinition(String name, String field) {
 
         LOG.debug("> findByNameAndDefinition: {}", name, field);
@@ -323,7 +322,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         FieldDefinition fieldDefinition = fieldDefinitionService.findByDefinitionAndName(entityDefinition.getId(), field);
 
-        if(entityDefinition == null) {
+        if(fieldDefinition == null) {
 
             LOG.debug("< findByNameAndDefinition: {} -> {} not found", name, field);
 
