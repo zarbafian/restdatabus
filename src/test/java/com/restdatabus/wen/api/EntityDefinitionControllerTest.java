@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,6 +89,34 @@ public class EntityDefinitionControllerTest {
                 .andExpect ( jsonPath( "$.fields[0].name", is( data.getFields().get(0).getName() )))
                 .andExpect ( jsonPath( "$.fields[1].name", is( data.getFields().get(1).getName() )))
                 .andExpect ( jsonPath( "$.fields[2].name", is( data.getFields().get(2).getName() )));
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+
+        String product = "product";
+
+        List<EntityDefinitionData> allDefinitions = Arrays.asList(
+                new EntityDefinitionData("customer"),
+                new EntityDefinitionData("invoice"),
+                new EntityDefinitionData("product")
+        );
+
+        given( controller.allDefinitions() ).willReturn(
+                new ResponseEntity<List<EntityDefinitionData>>(allDefinitions, HttpStatus.OK)
+        );
+
+        mvc.perform( get( DEFINITIONS))
+                .andExpect( status().isOk() )
+                .andExpect ( jsonPath( "$", hasSize(3)));
+
+        given( controller.deleteByName(product) ).willReturn(
+                new ResponseEntity<Void>(HttpStatus.NO_CONTENT)
+        );
+
+        mvc.perform( delete( DEFINITIONS + "/" + product))
+                .andExpect( status().isNoContent() );
+
     }
 
     private byte[] toJson(List<FieldDefinitionData> fieldDefinitionDatas) throws JsonProcessingException {
