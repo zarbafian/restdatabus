@@ -11,19 +11,6 @@ COMMENT ON SCHEMA public
 ---------------------- Security tables----------------------
 ------------------------------------------------------------
 
--- person
-CREATE TABLE person
-(
-  id bigserial NOT NULL,
-  name character varying NOT NULL,
-  CONSTRAINT pk_user PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE person
-  OWNER TO restdatabus;
-
 -- account
 CREATE TABLE account
 (
@@ -38,7 +25,6 @@ CREATE TABLE account
   created_at timestamp without time zone NOT NULL,
   updated_by bigint,
   updated_at timestamp without time zone,
-  person_id bigint NOT NULL,
   CONSTRAINT pk_account PRIMARY KEY (id),
   CONSTRAINT uq_account_username UNIQUE (username),
   CONSTRAINT fk_account_created_by FOREIGN KEY (created_by)
@@ -46,9 +32,6 @@ CREATE TABLE account
         ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_account_updated_by FOREIGN KEY (updated_by)
         REFERENCES account (id) MATCH SIMPLE
-        ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fk_account_person_id FOREIGN KEY (person_id)
-        REFERENCES person (id) MATCH SIMPLE
         ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
@@ -93,6 +76,23 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE account_role
+  OWNER TO restdatabus;
+
+-- person
+CREATE TABLE person
+(
+  id bigserial NOT NULL,
+  name character varying NOT NULL,
+  account_id bigserial NOT NULL,
+  CONSTRAINT pk_user PRIMARY KEY (id),
+  CONSTRAINT fk_person_account_id FOREIGN KEY (account_id)
+        REFERENCES account (id) MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE person
   OWNER TO restdatabus;
 
 ------------------------------------------------------------

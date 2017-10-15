@@ -324,12 +324,12 @@ public class InternalEntityDefinitionManagerImpl {
         return EntityDefinitionHelper.persistToDvo(fieldDefinition);
     }
 
-    private static final String theEntity = "the entity '";
-    private static final String doesNotExist = "' does not exist";
-    private static final String alreadyExist = "' already exist";
-    private static final String alreadyHasAField = "' already has a field '";
-    private static final String doesNotHaveAField = "' does not have a field '";
-    private static final String endQuote = "'";
+    private static String theEntity = "the entity '";
+    private static String doesNotExist = "' does not exist";
+    private static String alreadyExist = "' already exist";
+    private static String alreadyHasAField = "' already has a field '";
+    private static String doesNotHaveAField = "' does not have a field '";
+    private static String endQuote = "'";
 
     private String fieldDoesNotExist(String name, String field){
         return theEntity + name + doesNotHaveAField + field + endQuote;
