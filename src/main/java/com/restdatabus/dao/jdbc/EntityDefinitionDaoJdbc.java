@@ -43,7 +43,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
 
         LOG.debug("> insert: {}", entity);
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", entity.getName());
         Number newId = insertEntityDefinition.executeAndReturnKey(parameters);
 
@@ -109,7 +109,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
 
         jdbcTemplate.update(
                 "DELETE FROM entity_definition WHERE id=?",
-                new Object[] { id }
+                id
         );
 
         LOG.debug("< delete");
@@ -122,7 +122,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
 
         jdbcTemplate.update(
                 "UPDATE entity_definition SET name=? WHERE id=?",
-                new Object[] { entityDefinition.getName(), entityDefinition.getId() }
+                entityDefinition.getName(), entityDefinition.getId()
         );
 
         LOG.debug("< update: {}", entityDefinition);

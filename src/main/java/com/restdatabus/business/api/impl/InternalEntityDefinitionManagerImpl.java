@@ -47,7 +47,7 @@ public class InternalEntityDefinitionManagerImpl {
         EntityDefinition entityDefinition = entityDefinitionService.findByName(data.getName());
 
         if (entityDefinition != null) {
-            String msg = "the name '" + data.getName() + "' already exists";
+            String msg = entityAlreadyExist(data.getName());
             LOG.error(msg);
             throw new IllegalArgumentException(msg);
         }
@@ -110,7 +110,7 @@ public class InternalEntityDefinitionManagerImpl {
             EntityDefinition entityDefinition = entityDefinitionService.findByName(newData.getName());
 
             if (entityDefinition != null) {
-                String msg = "the new name '" + newData.getName() + "' already exists";
+                String msg = entityAlreadyExist(newData.getName());
                 LOG.error(msg);
                 throw new IllegalArgumentException(msg);
             }
@@ -143,7 +143,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         if(entityDefinition == null) {
 
-            String msg = "the entity '" + name + "' does not exists";
+            String msg = entityDoesNotExist(name);
             LOG.error(msg);
             throw new IllegalArgumentException(msg);
         }
@@ -152,7 +152,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         if(fieldDefinition != null) {
 
-            String msg = "the entity '" + name + "' already has a field '" + data.getName() + "'";
+            String msg = fieldAlreadyExist(name, data.getName());
             LOG.error(msg);
             throw new IllegalArgumentException(msg);
         }
@@ -180,7 +180,7 @@ public class InternalEntityDefinitionManagerImpl {
         EntityDefinition entityDefinition = entityDefinitionService.findByName(name);
         if(entityDefinition == null) {
 
-            String msg = "the entity '" + name + "' does not exists";
+            String msg = entityDoesNotExist(name);
             LOG.error(msg);
             throw new IllegalArgumentException(msg);
         }
@@ -189,7 +189,7 @@ public class InternalEntityDefinitionManagerImpl {
         FieldDefinition existingFieldDefinition = fieldDefinitionService.findByDefinitionAndName(entityDefinition.getId(), field);
         if(existingFieldDefinition == null) {
 
-            String msg = "the entity '" + name + "' does not a field '" + field + "'";
+            String msg = fieldDoesNotExist(name, field);
             LOG.error(msg);
             throw new IllegalArgumentException(msg);
         }
@@ -204,7 +204,7 @@ public class InternalEntityDefinitionManagerImpl {
             FieldDefinition fieldDefinition = fieldDefinitionService.findByDefinitionAndName(entityDefinition.getId(), newData.getName());
 
             if (fieldDefinition != null) {
-                String msg = "the new field name '" + newData.getName() + "' already exists";
+                String msg = fieldAlreadyExist(name, newData.getName());
                 LOG.error(msg);
                 throw new IllegalArgumentException(msg);
             }
@@ -322,5 +322,25 @@ public class InternalEntityDefinitionManagerImpl {
         LOG.debug("< findByNameAndDefinition: found {}", entityDefinition);
 
         return EntityDefinitionHelper.persistToDvo(fieldDefinition);
+    }
+
+    private static final String theEntity = "the entity '";
+    private static final String doesNotExist = "' does not exist";
+    private static final String alreadyExist = "' already exist";
+    private static final String alreadyHasAField = "' already has a field '";
+    private static final String doesNotHaveAField = "' does not have a field '";
+    private static final String endQuote = "'";
+
+    private String fieldDoesNotExist(String name, String field){
+        return theEntity + name + doesNotHaveAField + field + endQuote;
+    }
+    private String fieldAlreadyExist(String name, String field){
+        return theEntity + name + alreadyHasAField + field + endQuote;
+    }
+    private String entityAlreadyExist(String name){
+        return theEntity + name + alreadyExist;
+    }
+    private String entityDoesNotExist(String name){
+        return theEntity + name + doesNotExist;
     }
 }

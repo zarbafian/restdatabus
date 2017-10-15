@@ -43,7 +43,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         LOG.debug("> insert: {}", field);
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", field.getName());
         parameters.put("type", field.getType().getKey());
         parameters.put("entity_definition_id", field.getEntityDefinitionId());
@@ -80,7 +80,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         jdbcTemplate.update(
                 "DELETE FROM field_definition WHERE id=?",
-                new Object[] { id }
+                id
         );
 
         LOG.debug("< delete: {}", id);
@@ -93,7 +93,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         jdbcTemplate.update(
                 "DELETE FROM field_definition WHERE entity_definition_id=?",
-                new Object[] { id }
+                id
         );
 
         LOG.debug("< deleteByEntityDefinition: {}", id);
@@ -106,7 +106,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         jdbcTemplate.update(
                 "UPDATE field_definition SET name=?, type=? WHERE id=?",
-                new Object[] { fieldDefinition.getName(), fieldDefinition.getType().getKey(), fieldDefinition.getId() }
+                fieldDefinition.getName(), fieldDefinition.getType().getKey(), fieldDefinition.getId()
         );
 
         LOG.debug("< update: {}", fieldDefinition);
@@ -128,7 +128,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         LOG.debug("< findByDefinitionAndName: found {} field definitions(s)", results.size());
 
-        if(results.size() == 0) {
+        if(results.isEmpty()) {
             return null;
         }
 
