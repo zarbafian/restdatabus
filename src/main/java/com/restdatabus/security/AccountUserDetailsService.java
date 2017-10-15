@@ -9,7 +9,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,13 +22,13 @@ public class AccountUserDetailsService implements UserDetailsService {
     private AccountService accountService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
 
         Account account = accountService.findByUsername(username);
 
         if(account == null) {
             // Not found
-            throw new RuntimeException("Invalid username");
+            throw new SecurityException("Invalid username");
         }
 
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
