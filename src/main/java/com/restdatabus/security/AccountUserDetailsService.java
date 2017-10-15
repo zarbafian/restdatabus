@@ -29,7 +29,7 @@ public class AccountUserDetailsService implements UserDetailsService {
 
         if(account == null) {
             // Not found
-            throw new UsernameNotFoundException("Invalid username");
+            throw new RuntimeException("Invalid username");
         }
 
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
@@ -37,11 +37,9 @@ public class AccountUserDetailsService implements UserDetailsService {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getCode()));
         }
 
-        User userDetails = new User(account.getUsername(),
+        return new User(account.getUsername(),
                 account.getPassword(), account.isEnabled(),
                 !account.isExpired(), !account.isCredentialsExpired(),
                 !account.isLocked(), grantedAuthorities);
-
-        return userDetails;
     }
 }

@@ -23,7 +23,7 @@ public class IsUpController {
 
         LOG.debug("-----------------------status-----------------------");
 
-        return new ResponseEntity<String>(OK, HttpStatus.OK);
+        return new ResponseEntity<>(OK, HttpStatus.OK);
     }
 
     @RequestMapping(
@@ -34,6 +34,6 @@ public class IsUpController {
 
         LOG.debug("-----------------------statusAdmin-----------------------");
 
-        return new ResponseEntity<String>(OK, HttpStatus.OK);
+        return new ResponseEntity<>(OK, HttpStatus.OK);
     }
 }

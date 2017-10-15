@@ -27,9 +27,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private Pbkdf2Config pbkdf2Config1 = new Pbkdf2Config("", 512, 64000);
-    //private Pbkdf2Config pbkdf2Config2 = new Pbkdf2Config("", 512, 128000);
-    private Pbkdf2Config pbkdf2Config = pbkdf2Config1;
+    private Pbkdf2Config pbkdf2Config = new Pbkdf2Config("", 512, 64000);
 
 
     @Bean
@@ -82,13 +80,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // TODO
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        //configuration.setAllowedOrigins(Arrays.asList(GlobalConfiguration.WEB_ORIGIN));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 
-        // TODO : check
         configuration.setAllowCredentials(true);configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

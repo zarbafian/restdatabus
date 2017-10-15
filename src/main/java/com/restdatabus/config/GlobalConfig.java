@@ -5,6 +5,7 @@ package com.restdatabus.config;
  */
 public class GlobalConfig {
 
-    //public static final String WEB_ORIGIN = "http://localhost:4200";
+    private GlobalConfig(){}
+
     public static final String JSESSIONID = "JSESSIONID";
 }

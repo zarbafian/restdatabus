@@ -24,19 +24,18 @@ public class AccountAuthenticationProvider extends AbstractUserDetailsAuthentica
             throws AuthenticationException {
 
         if(token.getCredentials() == null || userDetails.getPassword() == null) {
-            throw new BadCredentialsException("Credentials may not be null.");
+            throw new RuntimeException("Credentials may not be null.");
         }
 
 
         if(!passwordEncoder.matches((String) token.getCredentials(), userDetails.getPassword())) {
-            throw new BadCredentialsException("Invalid credentials.");
+            throw new RuntimeException("Invalid credentials.");
         }
     }
 
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        return userDetails;
+        return userDetailsService.loadUserByUsername(username);
     }
 }
