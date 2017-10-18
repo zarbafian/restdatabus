@@ -46,6 +46,6 @@ public class UserController {
                 role -> userData.getRoles().add(role.getLabel())
         );
 
-        return new ResponseEntity<UserData>(userData, HttpStatus.OK);
+        return new ResponseEntity<>(userData, HttpStatus.OK);
     }
 }

@@ -9,9 +9,9 @@ public class DefinitionsUrlTest {
     @org.junit.Test
     public void apiConstants() {
 
-        assertThat(DEFINITIONS.equals("/definitions"));
-        assertThat(DEFINITION_BY_NAME.equals("/definitions/{name}"));
-        assertThat(FIELDS_BY_NAME.equals("/definitions/{name}/fields"));
-        assertThat(FIELDS_BY_NAME.equals("/definitions/{name}/fields/{field}"));
+        assertThat(DEFINITIONS.equals("/definitions")).isTrue();
+        assertThat(DEFINITION_BY_NAME.equals("/definitions/{name}")).isTrue();
+        assertThat(FIELDS_BY_NAME.equals("/definitions/{name}/fields")).isTrue();
+        assertThat(FIELDS_BY_NAME.equals("/definitions/{name}/fields/{field}")).isTrue();
     }
 }
