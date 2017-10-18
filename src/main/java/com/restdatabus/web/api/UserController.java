@@ -1,5 +1,7 @@
 package com.restdatabus.web.api;
 
+import static com.restdatabus.web.api.Constants.PRINCIPAL;
+
 import com.restdatabus.model.data.dvo.UserData;
 import com.restdatabus.model.service.AccountService;
 import com.restdatabus.security.model.Account;
@@ -24,7 +26,7 @@ public class UserController {
     private AccountService accountService;
 
     @RequestMapping(
-            value = "/api/principal",
+            value = PRINCIPAL,
             method = RequestMethod.GET
     )
     public ResponseEntity<UserData> principal(Principal principal) {

@@ -1,5 +1,8 @@
 package com.restdatabus.web.api;
 
+import static com.restdatabus.web.api.Constants.USER_STATUS;
+import static com.restdatabus.web.api.Constants.ADMIN_STATUS;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -16,7 +19,7 @@ public class IsUpController {
     private static final String OK = "OK";
 
     @RequestMapping(
-            value = "/api/status",
+            value = USER_STATUS,
             method = RequestMethod.GET
     )
     public ResponseEntity<String> status() {
@@ -27,7 +30,7 @@ public class IsUpController {
     }
 
     @RequestMapping(
-            value = "/admin/status",
+            value = ADMIN_STATUS,
             method = RequestMethod.GET
     )
     public ResponseEntity<String> statusAdmin() {

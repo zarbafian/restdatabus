@@ -1,5 +1,7 @@
 package com.restdatabus.web.api;
 
+import static com.restdatabus.web.api.Constants.*;
+
 import com.restdatabus.business.api.EntityDefinitionManager;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
@@ -22,7 +24,7 @@ public class EntityDefinitionController {
     private EntityDefinitionManager manager;
 
     @RequestMapping(
-            value = "/definitions",
+            value = DEFINITIONS,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -37,7 +39,7 @@ public class EntityDefinitionController {
     }
 
     @RequestMapping(
-            value = "/definitions/{name}/fields/{field}",
+            value = FIELD_BY_NAME_AND_FIELD,
             method = RequestMethod.DELETE
     )
     public ResponseEntity<Void> deleteFieldDefinition(@PathVariable(value = "name") String name, @PathVariable(value = "field") String field) {
@@ -50,7 +52,7 @@ public class EntityDefinitionController {
     }
 
     @RequestMapping(
-            value = "/definitions/{name}/fields/{field}",
+            value = FIELD_BY_NAME_AND_FIELD,
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -65,7 +67,7 @@ public class EntityDefinitionController {
     }
 
     @RequestMapping(
-            value = "/definitions/{name}/fields",
+            value = FIELDS_BY_NAME,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -80,7 +82,7 @@ public class EntityDefinitionController {
     }
 
     @RequestMapping(
-            value = "/definitions/{name}",
+            value = DEFINITION_BY_NAME,
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -95,7 +97,7 @@ public class EntityDefinitionController {
     }
 
     @RequestMapping(
-            value = "/definitions/{name}",
+            value = DEFINITION_BY_NAME,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -113,7 +115,7 @@ public class EntityDefinitionController {
     }
 
     @RequestMapping(
-            value = "/definitions/{name}",
+            value = DEFINITION_BY_NAME,
             method = RequestMethod.DELETE
     )
     public ResponseEntity<Void> deleteByName(@PathVariable(value = "name") String name) {
@@ -126,7 +128,7 @@ public class EntityDefinitionController {
     }
 
     @RequestMapping(
-            value = "/definitions",
+            value = DEFINITIONS,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
