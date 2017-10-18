@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,8 +36,10 @@ public class MockMvcTest {
     private MockMvc mvc;
 
     @Test
+    @WithUserDetails("poz")
     public void getAllDefinitions() throws Exception {
-        this.mvc.perform(
+        this.mvc
+            .perform(
                 get(Constants.DEFINITIONS))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -47,6 +51,7 @@ public class MockMvcTest {
     }
 
     @Test
+    @WithUserDetails("poz")
     public void getProductDefinitions() throws Exception {
 
         this.mvc.perform(
@@ -59,6 +64,7 @@ public class MockMvcTest {
     }
 
     @Test
+    @WithUserDetails("poz")
     @DirtiesContext
     public void deleteProductDefinition() throws Exception {
 
