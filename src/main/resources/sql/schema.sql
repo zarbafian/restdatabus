@@ -99,6 +99,20 @@ ALTER TABLE person
 ---------------------- Business tables----------------------
 ------------------------------------------------------------
 
+-- field_type
+CREATE TABLE field_type
+(
+  id bigserial NOT NULL,
+  key character varying NOT NULL,
+  CONSTRAINT pk_field_type PRIMARY KEY (id),
+  CONSTRAINT uq_field_type_code UNIQUE (key)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE field_type
+  OWNER TO restdatabus;
+
 -- entity_definition
 CREATE TABLE entity_definition
 (
@@ -118,11 +132,14 @@ CREATE TABLE field_definition
 (
   id bigserial NOT NULL,
   name character varying NOT NULL,
-  type character varying NOT NULL,
+  field_type_id bigint NOT NULL,
   entity_definition_id bigint NOT NULL,
   CONSTRAINT pk_field_definition_id PRIMARY KEY (id),
   CONSTRAINT fk_entity_definition_id FOREIGN KEY (entity_definition_id)
       REFERENCES entity_definition (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_field_type_id FOREIGN KEY (field_type_id)
+      REFERENCES field_type (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (

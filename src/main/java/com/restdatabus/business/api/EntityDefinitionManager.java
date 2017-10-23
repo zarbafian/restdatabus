@@ -2,6 +2,7 @@ package com.restdatabus.business.api;
 
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
+import com.restdatabus.model.data.dvo.FieldTypeData;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface EntityDefinitionManager {
     void deleteField(String name, String field);
 
     FieldDefinitionData updateField(String name, String field, FieldDefinitionData newData);
+
+    List<FieldTypeData> getFieldTypes();
 }

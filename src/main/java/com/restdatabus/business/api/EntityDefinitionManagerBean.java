@@ -4,6 +4,8 @@ import com.restdatabus.authorization.Action;
 import com.restdatabus.business.api.impl.InternalEntityDefinitionManagerImpl;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
+import com.restdatabus.model.data.dvo.FieldTypeData;
+import com.restdatabus.web.api.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,6 +142,30 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         }
 
         return updatedData;
+    }
+
+    @Override
+    public List<FieldTypeData> getFieldTypes() {
+
+        LOG.debug("getFieldTypes");
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                Constants.FIELD_TYPES,
+                Action.READ
+        );
+
+        List<FieldTypeData> fieldTypeDatas = this.impl.getFieldTypes();
+
+        // Notify event
+        eventNotificationManager.push(
+                Constants.FIELD_TYPES,
+                Action.READ,
+                fieldTypeDatas,
+                fieldTypeDatas
+        );
+
+        return fieldTypeDatas;
     }
 
     @Override

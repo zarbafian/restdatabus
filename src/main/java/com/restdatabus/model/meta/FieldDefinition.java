@@ -1,7 +1,5 @@
 package com.restdatabus.model.meta;
 
-import com.restdatabus.model.data.DataType;
-
 /**
  * The definition of a field.
  */
@@ -20,22 +18,20 @@ public class FieldDefinition {
     /**
      * The type of the field.
      */
-    private DataType type;
+    private Long fieldTypeId;
 
     /**
      * The identifier of the entity definition to which the field pertains.
      */
     private Long entityDefinitionId;
 
-    public FieldDefinition(String name, DataType type) {
-        this.type = type;
-        this.name = name;
+    public FieldDefinition() {
     }
 
     public FieldDefinition(FieldDefinition definition) {
         this.id = definition.getId();
         this.name = definition.getName();
-        this.type = definition.getType();
+        this.setEntityDefinitionId(definition.getEntityDefinitionId());
         this.setEntityDefinitionId(definition.getEntityDefinitionId());
     }
 
@@ -44,7 +40,7 @@ public class FieldDefinition {
         return "FieldDefinition{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", type=" + type +
+                ", fieldTypeId=" + fieldTypeId +
                 ", entityDefinitionId=" + entityDefinitionId +
                 '}';
     }
@@ -65,12 +61,12 @@ public class FieldDefinition {
         this.name = name;
     }
 
-    public DataType getType() {
-        return type;
+    public Long getFieldTypeId() {
+        return fieldTypeId;
     }
 
-    public void setType(DataType type) {
-        this.type = type;
+    public void setFieldTypeId(Long fieldTypeId) {
+        this.fieldTypeId = fieldTypeId;
     }
 
     public Long getEntityDefinitionId() {

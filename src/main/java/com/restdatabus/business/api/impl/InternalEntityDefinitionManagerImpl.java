@@ -2,11 +2,14 @@ package com.restdatabus.business.api.impl;
 
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
-import com.restdatabus.model.data.transform.EntityDefinitionHelper;
+import com.restdatabus.model.data.dvo.FieldTypeData;
+import com.restdatabus.model.data.transform.EntityDefinitionObjectMapper;
 import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
+import com.restdatabus.model.meta.FieldType;
 import com.restdatabus.model.service.EntityDefinitionService;
 import com.restdatabus.model.service.FieldDefinitionService;
+import com.restdatabus.model.service.FieldTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,12 @@ public class InternalEntityDefinitionManagerImpl {
     @Autowired
     private FieldDefinitionService fieldDefinitionService;
 
+    @Autowired
+    FieldTypeService fieldTypeService;
+
+    @Autowired
+    EntityDefinitionObjectMapper entityDefinitionObjectMapper;
+
     @Transactional(
             propagation = Propagation.REQUIRED,
             readOnly = false
@@ -53,7 +62,7 @@ public class InternalEntityDefinitionManagerImpl {
         }
 
         // Transform to a persistable form
-        entityDefinition = EntityDefinitionHelper.dvoToPersist(data);
+        entityDefinition = entityDefinitionObjectMapper.toEntityObject(data);
 
         // Persist entity
         EntityDefinition persistedEntity = entityDefinitionService.create(entityDefinition);
@@ -66,7 +75,7 @@ public class InternalEntityDefinitionManagerImpl {
             persistedEntity.getDefinitions().add(persistedField);
         }
 
-        return EntityDefinitionHelper.persistToDvo(persistedEntity);
+        return entityDefinitionObjectMapper.toDataObject(persistedEntity);
     }
 
     @Transactional(
@@ -120,7 +129,7 @@ public class InternalEntityDefinitionManagerImpl {
         EntityDefinition existingDefinition = entityDefinitionService.findByName(existingData.getName());
 
         // Transform new data to a persistable form
-        EntityDefinition newEntityDefinition = EntityDefinitionHelper.dvoToPersist(newData);
+        EntityDefinition newEntityDefinition = entityDefinitionObjectMapper.toEntityObject(newData);
 
         // Transfer data
         existingDefinition.setName(newEntityDefinition.getName());
@@ -128,7 +137,7 @@ public class InternalEntityDefinitionManagerImpl {
         // Update entity
         EntityDefinition updatedEntity = entityDefinitionService.update(existingDefinition);
 
-        return EntityDefinitionHelper.persistToDvo(updatedEntity);
+        return entityDefinitionObjectMapper.toDataObject(updatedEntity);
     }
 
     @Transactional(
@@ -157,14 +166,14 @@ public class InternalEntityDefinitionManagerImpl {
             throw new IllegalArgumentException(msg);
         }
 
-        fieldDefinition = EntityDefinitionHelper.dvoToPersist(data);
+        fieldDefinition = entityDefinitionObjectMapper.toEntityObject(data);
         fieldDefinition.setEntityDefinitionId(entityDefinition.getId());
 
         FieldDefinition persistedField = fieldDefinitionService.create(fieldDefinition);
 
         LOG.debug("< createField: {} -> {}", name, persistedField);
 
-        return EntityDefinitionHelper.persistToDvo(persistedField);
+        return entityDefinitionObjectMapper.toDataObject(persistedField);
     }
 
 
@@ -194,8 +203,8 @@ public class InternalEntityDefinitionManagerImpl {
             throw new IllegalArgumentException(msg);
         }
 
-        // Transform new data to persistable form
-        FieldDefinition newData = EntityDefinitionHelper.dvoToPersist(data);
+        // Transform new data to persistable form (load field type id)
+        FieldDefinition newData = entityDefinitionObjectMapper.toEntityObject(data);
 
         // Has the name changed
         if(! existingFieldDefinition.getName().equals(newData.getName()) ) {
@@ -214,14 +223,14 @@ public class InternalEntityDefinitionManagerImpl {
 
         // Transfer new data to existing field definition
         existingFieldDefinition.setName(newData.getName());
-        existingFieldDefinition.setType(newData.getType());
+        existingFieldDefinition.setFieldTypeId(newData.getFieldTypeId());
 
         // Persist changes
         FieldDefinition updatedField = fieldDefinitionService.update(existingFieldDefinition);
 
         LOG.debug("< updateField: {} -> {}", name, updatedField);
 
-        return EntityDefinitionHelper.persistToDvo(updatedField);
+        return entityDefinitionObjectMapper.toDataObject(updatedField);
     }
 
     @Transactional(
@@ -270,7 +279,8 @@ public class InternalEntityDefinitionManagerImpl {
         }
 
         LOG.debug("< findByName: found {}", entityDefinition);
-        return EntityDefinitionHelper.persistToDvo(entityDefinition);
+
+        return entityDefinitionObjectMapper.toDataObject(entityDefinition);
     }
 
     public List<EntityDefinitionData> findAll() {
@@ -290,7 +300,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         for(EntityDefinition entityDefinition: entityDefinitions) {
             results.add(
-                    EntityDefinitionHelper.persistToDvo(entityDefinition)
+                    entityDefinitionObjectMapper.toDataObject(entityDefinition)
             );
         }
 
@@ -321,7 +331,31 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("< findByNameAndDefinition: found {}", entityDefinition);
 
-        return EntityDefinitionHelper.persistToDvo(fieldDefinition);
+        return entityDefinitionObjectMapper.toDataObject(fieldDefinition);
+    }
+
+    public List<FieldTypeData> getFieldTypes() {
+
+        LOG.debug("> getFieldTypes");
+
+        List<FieldType> fieldTypes = fieldTypeService.findAll();
+
+        LOG.debug("= getFieldTypes: found {} results", fieldTypes.size());
+
+        List<FieldTypeData> results = new ArrayList<>();
+
+        if(fieldTypes.isEmpty()) {
+
+            return results;
+        }
+
+        for(FieldType fieldType: fieldTypes) {
+            results.add(
+                    entityDefinitionObjectMapper.toDataObject(fieldType)
+            );
+        }
+
+        return results;
     }
 
     private static String theEntity = "the entity '";

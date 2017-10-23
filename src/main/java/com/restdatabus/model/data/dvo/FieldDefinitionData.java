@@ -6,11 +6,14 @@ public class FieldDefinitionData implements Serializable {
 
     private String name;
 
-    private String type;
+    private FieldTypeData fieldType;
 
-    public FieldDefinitionData(String name, String type) {
+    public FieldDefinitionData() {
+    }
+
+    public FieldDefinitionData(String name, FieldTypeData fieldType) {
         this.name = name;
-        this.type = type;
+        this.fieldType = fieldType;
     }
 
     public String getName() {
@@ -21,37 +24,19 @@ public class FieldDefinitionData implements Serializable {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public FieldTypeData getFieldType() {
+        return fieldType;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FieldDefinitionData that = (FieldDefinitionData) o;
-
-        if (!name.equals(that.name)) return false;
-        return type.equals(that.type);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + type.hashCode();
-        return result;
+    public void setType(FieldTypeData fieldType) {
+        this.fieldType = fieldType;
     }
 
     @Override
     public String toString() {
         return "FieldDefinitionData{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' +
+                ", fieldType='" + fieldType + '\'' +
                 '}';
     }
 }

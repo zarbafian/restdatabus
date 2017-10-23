@@ -8,13 +8,14 @@ public enum DataType {
     /**
      * List 1 / 2, if you edit this list edit the also List 2 / 2 accordingly.
      */
-    YESNO("data-type.yesno"),
-    TEXT("data-type.text"),
-    PARAGRAPH("data-type.paragraph"),
-    INTEGER("data-type.integer"),
-    DECIMAL("data-type.decimal"),
-    LIST("data-type.list"),
-    ENTITY("data-type.entity");
+    YESNO("yesno"),
+    TEXT("text"),
+    PARAGRAPH("paragraph"),
+    INTEGER("integer"),
+    DECIMAL("decimal"),
+    LIST("list"),
+    ENTITY("entity"),
+    FILE("file");
 
     private String key;
 
@@ -31,20 +32,22 @@ public enum DataType {
             /**
              * List 2 / 2
              */
-            case "data-type.yesno":
+            case "yesno":
                 return YESNO;
-            case "data-type.paragraph":
+            case "paragraph":
                 return PARAGRAPH;
-            case "data-type.integer":
+            case "integer":
                 return INTEGER;
-            case "data-type.decimal":
+            case "decimal":
                 return DECIMAL;
-            case "data-type.list":
+            case "list":
                 return LIST;
-            case "data-type.entity":
+            case "entity":
                 return ENTITY;
-            case "data-type.text":
+            case "text":
                 return TEXT;
+            case "file":
+                return FILE;
 
                 default: throw new IllegalArgumentException("unknown data type '" + key + "'");
         }

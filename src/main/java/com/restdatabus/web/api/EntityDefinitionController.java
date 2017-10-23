@@ -3,8 +3,10 @@ package com.restdatabus.web.api;
 import static com.restdatabus.web.api.Constants.*;
 
 import com.restdatabus.business.api.EntityDefinitionManager;
+import com.restdatabus.model.data.DataType;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
+import com.restdatabus.model.data.dvo.FieldTypeData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -106,6 +109,24 @@ public class EntityDefinitionController {
         LOG.debug("getByName: {}", name);
 
         EntityDefinitionData foundData = manager.findByName(name);
+
+        if(foundData == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(foundData, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = FIELD_TYPES,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<FieldTypeData>> getFieldTypes() {
+
+        LOG.debug("getFieldTypes");
+
+        List<FieldTypeData> foundData = manager.getFieldTypes();
 
         if(foundData == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

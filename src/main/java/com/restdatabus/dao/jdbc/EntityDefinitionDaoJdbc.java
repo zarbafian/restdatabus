@@ -62,7 +62,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
 
         List<EntityDefinition> results = jdbcTemplate.query(
 
-                "SELECT ed.id, ed.name FROM entity_definition ed WHERE name=?",
+                "SELECT ed.id, ed.name FROM entity_definition ed WHERE ed.name=?",
                 new Object[]{name},
                 new EntityDefinitionRowMapper()
         );

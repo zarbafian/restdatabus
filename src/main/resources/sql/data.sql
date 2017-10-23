@@ -26,20 +26,31 @@ INSERT INTO person(name, account_id) SELECT 'Pouriya', a.id FROM account a WHERE
 
 -- Test data
 
+-- field types
+INSERT INTO field_type (key) VALUES ('yesno');
+INSERT INTO field_type (key) VALUES ('text');
+INSERT INTO field_type (key) VALUES ('paragraph');
+INSERT INTO field_type (key) VALUES ('integer');
+INSERT INTO field_type (key) VALUES ('decimal');
+INSERT INTO field_type (key) VALUES ('list');
+INSERT INTO field_type (key) VALUES ('entity');
+INSERT INTO field_type (key) VALUES ('file');
+
 -- entity definitions
 INSERT INTO entity_definition (name) VALUES ('customer');
 INSERT INTO entity_definition (name) VALUES ('product');
 INSERT INTO entity_definition (name) VALUES ('invoice');
 
 -- field definitions
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'firstname' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'customer';
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'laststname' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'customer';
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'address' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'customer';
 
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'reference' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'product';
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'price' , 'data-type.decimal', ed.id FROM entity_definition ed WHERE ed.name = 'product';
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'quantity' , 'data-type.integer', ed.id FROM entity_definition ed WHERE ed.name = 'product';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'firstname' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'lastname' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'address' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
 
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'amount' , 'data-type.decimal', ed.id FROM entity_definition ed WHERE ed.name = 'invoice';
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'customer' , 'data-type.text', ed.id FROM entity_definition ed WHERE ed.name = 'invoice';
-INSERT INTO field_definition (name, type, entity_definition_id) SELECT 'paid' , 'data-type.yesno', ed.id FROM entity_definition ed WHERE ed.name = 'invoice';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'reference' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='text';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'price' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='decimal';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'quantity' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='integer';
+
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'amount' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='decimal';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'customer' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='text';
+INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'paid' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='yesno';

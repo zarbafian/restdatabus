@@ -14,6 +14,7 @@ public class Constants {
 
     // Definitions and fields
     public static final String DEFINITIONS = API + "/definitions";
+    public static final String FIELD_TYPES = API + "/fieldtypes";
     public static final String DEFINITION_BY_NAME = DEFINITIONS + "/{name}";
     public static final String FIELDS_BY_NAME = DEFINITION_BY_NAME + "/fields";
     public static final String FIELD_BY_NAME_AND_FIELD = FIELDS_BY_NAME + "/{field}";

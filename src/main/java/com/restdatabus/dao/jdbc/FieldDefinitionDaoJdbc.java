@@ -3,7 +3,6 @@ package com.restdatabus.dao.jdbc;
 import com.restdatabus.dao.FieldDefinitionDao;
 import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
-import com.restdatabus.model.meta.FieldDefinitionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
         this.jdbcTemplate = jdbcTemplate;
         insertFieldDefinition = new SimpleJdbcInsert(jdbcTemplate)
                                         .withTableName("field_definition")
-                                        .usingColumns("name", "type", "entity_definition_id")
+                                        .usingColumns("name", "field_type_id", "entity_definition_id")
                                         .usingGeneratedKeyColumns("id");
     }
 
@@ -45,7 +44,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", field.getName());
-        parameters.put("type", field.getType().getKey());
+        parameters.put("field_type_id", field.getFieldTypeId());
         parameters.put("entity_definition_id", field.getEntityDefinitionId());
         Number newId = insertFieldDefinition.executeAndReturnKey(parameters);
 
@@ -63,7 +62,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         List<FieldDefinition> results = jdbcTemplate.query(
 
-                "SELECT fd.id, fd.name, fd.type, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=?",
+                "SELECT fd.id, fd.name, fd.field_type_id, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=?",
                 new Object[]{ entityDefinition.getId() },
                 new FieldDefinitionRowMapper()
         );
@@ -105,8 +104,8 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
         LOG.debug("> update: {}", fieldDefinition);
 
         jdbcTemplate.update(
-                "UPDATE field_definition SET name=?, type=? WHERE id=?",
-                fieldDefinition.getName(), fieldDefinition.getType().getKey(), fieldDefinition.getId()
+                "UPDATE field_definition SET name=?, field_type_id=? WHERE id=?",
+                fieldDefinition.getName(), fieldDefinition.getFieldTypeId(), fieldDefinition.getId()
         );
 
         LOG.debug("< update: {}", fieldDefinition);
@@ -121,7 +120,7 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         List<FieldDefinition> results = jdbcTemplate.query(
 
-                "SELECT fd.id, fd.name, fd.type, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=? AND fd.name=?",
+                "SELECT fd.id, fd.name, fd.field_type_id, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=? AND fd.name=?",
                 new Object[]{ entityDefinitionId, fieldName },
                 new FieldDefinitionRowMapper()
         );
@@ -142,11 +141,13 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
             Long id = resultSet.getLong(1);
             String name = resultSet.getString(2);
-            String type = resultSet.getString(3);
+            Long fieldTypeId = resultSet.getLong(3);
             Long entityDefId = resultSet.getLong(4);
 
-            FieldDefinition fieldDefinition = FieldDefinitionFactory.buildFromKey(type, name);
+            FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.setId(id);
+            fieldDefinition.setName(name);
+            fieldDefinition.setFieldTypeId(fieldTypeId);
             fieldDefinition.setEntityDefinitionId(entityDefId);
 
             return fieldDefinition;
