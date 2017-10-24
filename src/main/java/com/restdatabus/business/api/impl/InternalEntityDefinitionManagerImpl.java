@@ -52,6 +52,8 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("create: {}", data);
 
+        checkEntityName(data);
+
         // Check if the name is not already exist
         EntityDefinition entityDefinition = entityDefinitionService.findByName(data.getName());
 
@@ -112,6 +114,8 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("update: {} -> {}", existingData.getName(), newData);
 
+        checkEntityName(newData);
+
         // Has the name changed
         if(! existingData.getName().equals(newData.getName()) ) {
 
@@ -148,6 +152,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("> createField: {} -> {}", name, data);
 
+        checkFieldName(data);
         EntityDefinition entityDefinition = entityDefinitionService.findByName(name);
 
         if(entityDefinition == null) {
@@ -184,6 +189,8 @@ public class InternalEntityDefinitionManagerImpl {
     public FieldDefinitionData updateField(String name, String field, FieldDefinitionData data) {
 
         LOG.debug("> updateField: {}.{} -> {}", name, field, data);
+
+        checkFieldName(data);
 
         // Check that entity exit
         EntityDefinition entityDefinition = entityDefinitionService.findByName(name);
@@ -358,6 +365,24 @@ public class InternalEntityDefinitionManagerImpl {
         return results;
     }
 
+    private void checkEntityName(EntityDefinitionData data) {
+        if(data.getName() == null || data.getName().isEmpty()) {
+            String msg = entityNameCannotBeEmpty();
+            LOG.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
+    private void checkFieldName(FieldDefinitionData data) {
+        if(data.getName() == null || data.getName().isEmpty()) {
+            String msg = fieldNameCannotBeEmpty();
+            LOG.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
+    private static String entityNameCannotBeEmpty = "the entity name cannot be empty";
+    private static String fieldNameCannotBeEmpty = "the field name cannot be empty";
     private static String theEntity = "the entity '";
     private static String doesNotExist = "' does not exist";
     private static String alreadyExist = "' already exist";
@@ -376,5 +401,11 @@ public class InternalEntityDefinitionManagerImpl {
     }
     private String entityDoesNotExist(String name){
         return theEntity + name + doesNotExist;
+    }
+    private String fieldNameCannotBeEmpty() {
+        return fieldNameCannotBeEmpty;
+    }
+    private String entityNameCannotBeEmpty() {
+        return entityNameCannotBeEmpty;
     }
 }
