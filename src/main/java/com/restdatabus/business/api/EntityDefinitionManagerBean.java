@@ -110,7 +110,7 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
                 fieldDefinitionData // TODO: + name?
         );
 
-        return null;
+        return fieldDefinitionData;
     }
 
     @Override
