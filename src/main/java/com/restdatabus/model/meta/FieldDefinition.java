@@ -31,7 +31,7 @@ public class FieldDefinition {
     public FieldDefinition(FieldDefinition definition) {
         this.id = definition.getId();
         this.name = definition.getName();
-        this.setEntityDefinitionId(definition.getEntityDefinitionId());
+        this.setFieldTypeId(definition.getFieldTypeId());
         this.setEntityDefinitionId(definition.getEntityDefinitionId());
     }
 
