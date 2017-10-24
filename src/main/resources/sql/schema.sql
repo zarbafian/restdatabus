@@ -104,6 +104,7 @@ CREATE TABLE field_type
 (
   id bigserial NOT NULL,
   key character varying NOT NULL,
+  sql_type character varying NOT NULL,
   CONSTRAINT pk_field_type PRIMARY KEY (id),
   CONSTRAINT uq_field_type_code UNIQUE (key)
 )

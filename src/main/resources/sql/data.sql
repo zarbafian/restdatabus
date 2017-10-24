@@ -27,14 +27,14 @@ INSERT INTO person(name, account_id) SELECT 'Pouriya', a.id FROM account a WHERE
 -- Test data
 
 -- field types
-INSERT INTO field_type (key) VALUES ('yesno');
-INSERT INTO field_type (key) VALUES ('text');
-INSERT INTO field_type (key) VALUES ('paragraph');
-INSERT INTO field_type (key) VALUES ('integer');
-INSERT INTO field_type (key) VALUES ('decimal');
-INSERT INTO field_type (key) VALUES ('list');
-INSERT INTO field_type (key) VALUES ('entity');
-INSERT INTO field_type (key) VALUES ('file');
+INSERT INTO field_type (key, sql_type) VALUES ('yesno', 'boolean');
+INSERT INTO field_type (key, sql_type) VALUES ('text', 'character varying');
+INSERT INTO field_type (key, sql_type) VALUES ('paragraph', 'text');
+INSERT INTO field_type (key, sql_type) VALUES ('integer', 'integer');
+INSERT INTO field_type (key, sql_type) VALUES ('decimal', 'double precision');
+INSERT INTO field_type (key, sql_type) VALUES ('file', 'bytea');
+--INSERT INTO field_type (key, sql_type) VALUES ('list');
+--INSERT INTO field_type (key, sql_type) VALUES ('entity');
 
 -- entity definitions
 INSERT INTO entity_definition (name) VALUES ('customer');

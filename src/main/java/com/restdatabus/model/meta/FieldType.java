@@ -6,17 +6,15 @@ public class FieldType {
 
     private String key;
 
-    public FieldType() {
-    }
+    private String sqlType;
 
-    public FieldType(Long id, String key) {
-        this.id = id;
-        this.key = key;
+    public FieldType() {
     }
 
     public FieldType(FieldType fieldType) {
         this.id = fieldType.getId();
         this.key = fieldType.getKey();
+        this.sqlType = fieldType.getSqlType();
     }
 
     @Override
@@ -24,6 +22,7 @@ public class FieldType {
         return "FieldType{" +
                 "id=" + id +
                 ", key='" + key + '\'' +
+                ", sqlType='" + sqlType + '\'' +
                 '}';
     }
 
@@ -41,5 +40,13 @@ public class FieldType {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getSqlType() {
+        return sqlType;
+    }
+
+    public void setSqlType(String sqlType) {
+        this.sqlType = sqlType;
     }
 }

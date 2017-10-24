@@ -32,7 +32,7 @@ public class FieldTypeDaoJdbc implements FieldTypeDao {
 
         List<FieldType> results = jdbcTemplate.query(
 
-                "SELECT ft.id, ft.key FROM field_type ft WHERE ft.id=?",
+                "SELECT ft.id, ft.key, ft.sql_type FROM field_type ft WHERE ft.id=?",
                 new Object[]{ id },
                 new FieldTypeRowMapper()
         );
@@ -56,7 +56,7 @@ public class FieldTypeDaoJdbc implements FieldTypeDao {
 
         List<FieldType> results = jdbcTemplate.query(
 
-                "SELECT ft.id, ft.key FROM field_type ft WHERE ft.key=?",
+                "SELECT ft.id, ft.key, ft.sql_type FROM field_type ft WHERE ft.key=?",
                 new Object[]{ key },
                 new FieldTypeRowMapper()
         );
@@ -80,7 +80,7 @@ public class FieldTypeDaoJdbc implements FieldTypeDao {
 
         List<FieldType> results = jdbcTemplate.query(
 
-                "SELECT ft.id, ft.key FROM field_type ft",
+                "SELECT ft.id, ft.key, ft.sql_type FROM field_type ft",
                 new Object[]{},
                 new FieldTypeRowMapper()
         );
@@ -97,7 +97,11 @@ public class FieldTypeDaoJdbc implements FieldTypeDao {
 
             Long id = resultSet.getLong(1);
             String key = resultSet.getString(2);
-            FieldType fieldType = new FieldType(id, key);
+            String sqlType = resultSet.getString(3);
+            FieldType fieldType = new FieldType();
+            fieldType.setId(id);
+            fieldType.setKey(key);
+            fieldType.setSqlType(sqlType);
 
             return fieldType;
         }

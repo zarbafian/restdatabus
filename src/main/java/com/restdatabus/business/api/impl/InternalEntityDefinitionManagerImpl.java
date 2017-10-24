@@ -8,6 +8,7 @@ import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
 import com.restdatabus.model.meta.FieldType;
 import com.restdatabus.model.service.EntityDefinitionService;
+import com.restdatabus.model.service.EntityTableService;
 import com.restdatabus.model.service.FieldDefinitionService;
 import com.restdatabus.model.service.FieldTypeService;
 import org.slf4j.Logger;
@@ -39,7 +40,10 @@ public class InternalEntityDefinitionManagerImpl {
     private FieldDefinitionService fieldDefinitionService;
 
     @Autowired
-    FieldTypeService fieldTypeService;
+    private FieldTypeService fieldTypeService;
+
+    @Autowired
+    private EntityTableService entityTableService;
 
     @Autowired
     EntityDefinitionObjectMapper entityDefinitionObjectMapper;
@@ -69,11 +73,19 @@ public class InternalEntityDefinitionManagerImpl {
         // Persist entity
         EntityDefinition persistedEntity = entityDefinitionService.create(entityDefinition);
 
+        // Create table
+        entityTableService.createTable(persistedEntity);
+
         // Persist fields
         for(FieldDefinition field: entityDefinition.getDefinitions()) {
 
             field.setEntityDefinitionId(persistedEntity.getId());
             FieldDefinition persistedField = fieldDefinitionService.create(field);
+
+            // Create column
+            String sqlType = fieldTypeService.findById(persistedField.getFieldTypeId()).getSqlType();
+            entityTableService.addColumn(persistedField, sqlType);
+
             persistedEntity.getDefinitions().add(persistedField);
         }
 
@@ -175,6 +187,10 @@ public class InternalEntityDefinitionManagerImpl {
         fieldDefinition.setEntityDefinitionId(entityDefinition.getId());
 
         FieldDefinition persistedField = fieldDefinitionService.create(fieldDefinition);
+
+        // Create column
+        String sqlType = fieldTypeService.findById(persistedField.getFieldTypeId()).getSqlType();
+        entityTableService.addColumn(persistedField, sqlType);
 
         LOG.debug("< createField: {} -> {}", name, persistedField);
 
