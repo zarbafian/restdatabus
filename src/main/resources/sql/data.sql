@@ -33,8 +33,8 @@ INSERT INTO field_type (key, sql_type) VALUES ('paragraph', 'text');
 INSERT INTO field_type (key, sql_type) VALUES ('integer', 'integer');
 INSERT INTO field_type (key, sql_type) VALUES ('decimal', 'double precision');
 INSERT INTO field_type (key, sql_type) VALUES ('file', 'bytea');
+INSERT INTO field_type (key, sql_type) VALUES ('entity', 'bigint');
 --INSERT INTO field_type (key, sql_type) VALUES ('list');
---INSERT INTO field_type (key, sql_type) VALUES ('entity');
 
 -- entity definitions
 INSERT INTO entity_definition (name) VALUES ('customer');

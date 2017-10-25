@@ -148,3 +148,23 @@ WITH (
 );
 ALTER TABLE field_definition
   OWNER TO restdatabus;
+
+-- relation_definition
+CREATE TABLE relation_definition
+(
+  id bigserial NOT NULL,
+  field_definition_id bigint NOT NULL,
+  entity_definition_id bigint NOT NULL,
+  CONSTRAINT pk_relation_definition_id PRIMARY KEY (id),
+  CONSTRAINT fk_relation_entity_def_id FOREIGN KEY (entity_definition_id)
+      REFERENCES entity_definition (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_relation_field_id FOREIGN KEY (field_definition_id)
+      REFERENCES field_definition (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE field_definition
+  OWNER TO restdatabus;
