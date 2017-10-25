@@ -1,5 +1,7 @@
 package com.restdatabus.business.api.impl;
 
+import static com.restdatabus.business.api.impl.EntityDefinitionImplHelper.*;
+
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
 import com.restdatabus.model.data.dvo.FieldTypeData;
@@ -34,6 +36,9 @@ public class InternalEntityDefinitionManagerImpl {
     private static final Logger LOG = LoggerFactory.getLogger(InternalEntityDefinitionManagerImpl.class);
 
     @Autowired
+    private InternalFieldDefinitionManagerImpl fieldImpl;
+
+    @Autowired
     private EntityDefinitionService entityDefinitionService;
 
     @Autowired
@@ -56,7 +61,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("create: {}", data);
 
-        checkEntityName(data);
+        checkEntityName(LOG, data);
 
         // Check if the name is not already exist
         EntityDefinition entityDefinition = entityDefinitionService.findByName(data.getName());
@@ -80,11 +85,8 @@ public class InternalEntityDefinitionManagerImpl {
         for(FieldDefinition field: entityDefinition.getDefinitions()) {
 
             field.setEntityDefinitionId(persistedEntity.getId());
-            FieldDefinition persistedField = fieldDefinitionService.create(field);
 
-            // Create column
-            String sqlType = fieldTypeService.findById(persistedField.getFieldTypeId()).getSqlType();
-            entityTableService.addColumn(persistedField, sqlType);
+            FieldDefinition persistedField = fieldImpl.create(field);
 
             persistedEntity.getDefinitions().add(persistedField);
         }
@@ -110,7 +112,10 @@ public class InternalEntityDefinitionManagerImpl {
         }
 
         // Delete fields
-        fieldDefinitionService.deleteByEntityDefinition(entityDefinition.getId());
+        for(FieldDefinition fieldDefinition: entityDefinition.getDefinitions()) {
+
+            fieldImpl.delete(fieldDefinition);
+        }
 
         // Delete entity definition
         entityDefinitionService.delete(entityDefinition.getId());
@@ -131,7 +136,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("update: {} -> {}", existingData.getName(), newData);
 
-        checkEntityName(newData);
+        checkEntityName(LOG, newData);
 
         // Has the name changed
         if(! existingData.getName().equals(newData.getName()) ) {
@@ -169,7 +174,8 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("> createField: {} -> {}", name, data);
 
-        checkFieldName(data);
+        checkFieldName(LOG, data);
+
         EntityDefinition entityDefinition = entityDefinitionService.findByName(name);
 
         if(entityDefinition == null) {
@@ -191,12 +197,7 @@ public class InternalEntityDefinitionManagerImpl {
         fieldDefinition = entityDefinitionObjectMapper.toEntityObject(data);
         fieldDefinition.setEntityDefinitionId(entityDefinition.getId());
 
-        // Create field
-        FieldDefinition persistedField = fieldDefinitionService.create(fieldDefinition);
-
-        // Create column
-        String sqlType = fieldTypeService.findById(persistedField.getFieldTypeId()).getSqlType();
-        entityTableService.addColumn(persistedField, sqlType);
+        FieldDefinition persistedField = fieldImpl.create(fieldDefinition);
 
         LOG.debug("< createField: {} -> {}", name, persistedField);
 
@@ -212,7 +213,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("> updateField: {}.{} -> {}", name, field, data);
 
-        checkFieldName(data);
+        checkFieldName(LOG, data);
 
         // Check that entity exit
         EntityDefinition entityDefinition = entityDefinitionService.findByName(name);
@@ -255,11 +256,7 @@ public class InternalEntityDefinitionManagerImpl {
         existingFieldDefinition.setFieldTypeId(newData.getFieldTypeId());
 
         // Persist changes
-        FieldDefinition updatedField = fieldDefinitionService.update(existingFieldDefinition);
-
-        // Change column
-        String sqlType = fieldTypeService.findById(updatedField.getFieldTypeId()).getSqlType();
-        entityTableService.changeColumnType(updatedField, sqlType);
+        FieldDefinition updatedField = fieldImpl.update(existingFieldDefinition);
 
         LOG.debug("< updateField: {} -> {}", name, updatedField);
 
@@ -293,10 +290,7 @@ public class InternalEntityDefinitionManagerImpl {
         }
 
         // Delete field definition
-        fieldDefinitionService.delete(fieldDefinition.getId());
-
-        // Delete column
-        entityTableService.removeColumn(fieldDefinition);
+        fieldImpl.delete(fieldDefinition);
 
         LOG.debug("< deleteField: {}", name);
 
@@ -393,49 +387,5 @@ public class InternalEntityDefinitionManagerImpl {
         }
 
         return results;
-    }
-
-    private void checkEntityName(EntityDefinitionData data) {
-        if(data.getName() == null || data.getName().isEmpty()) {
-            String msg = entityNameCannotBeEmpty();
-            LOG.error(msg);
-            throw new IllegalArgumentException(msg);
-        }
-    }
-
-    private void checkFieldName(FieldDefinitionData data) {
-        if(data.getName() == null || data.getName().isEmpty()) {
-            String msg = fieldNameCannotBeEmpty();
-            LOG.error(msg);
-            throw new IllegalArgumentException(msg);
-        }
-    }
-
-    private static String entityNameCannotBeEmpty = "the entity name cannot be empty";
-    private static String fieldNameCannotBeEmpty = "the field name cannot be empty";
-    private static String theEntity = "the entity '";
-    private static String doesNotExist = "' does not exist";
-    private static String alreadyExist = "' already exist";
-    private static String alreadyHasAField = "' already has a field '";
-    private static String doesNotHaveAField = "' does not have a field '";
-    private static String endQuote = "'";
-
-    private String fieldDoesNotExist(String name, String field){
-        return theEntity + name + doesNotHaveAField + field + endQuote;
-    }
-    private String fieldAlreadyExist(String name, String field){
-        return theEntity + name + alreadyHasAField + field + endQuote;
-    }
-    private String entityAlreadyExist(String name){
-        return theEntity + name + alreadyExist;
-    }
-    private String entityDoesNotExist(String name){
-        return theEntity + name + doesNotExist;
-    }
-    private String fieldNameCannotBeEmpty() {
-        return fieldNameCannotBeEmpty;
-    }
-    private String entityNameCannotBeEmpty() {
-        return entityNameCannotBeEmpty;
     }
 }
