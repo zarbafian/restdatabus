@@ -25,10 +25,34 @@ public class EntityTableServiceBean implements EntityTableService {
     }
 
     @Override
+    public void deleteTable(EntityDefinition entityDefinition) {
+
+        LOG.debug("deleteTable: {}", entityDefinition);
+
+        entityTableDao.deleteTable(entityDefinition);
+    }
+
+    @Override
     public void addColumn(FieldDefinition fieldDefinition, String dataType) {
 
         LOG.debug("addColumn: {} - {}", fieldDefinition, dataType);
 
         entityTableDao.addColumn(fieldDefinition, dataType);
+    }
+
+    @Override
+    public void changeColumnType(FieldDefinition fieldDefinition, String newDataType) {
+
+        LOG.debug("changeColumnType: {} - {}", fieldDefinition, newDataType);
+
+        entityTableDao.changeColumnType(fieldDefinition, newDataType);
+    }
+
+    @Override
+    public void removeColumn(FieldDefinition fieldDefinition) {
+
+        LOG.debug("removeColumn: {}", fieldDefinition);
+
+        entityTableDao.removeColumn(fieldDefinition);
     }
 }

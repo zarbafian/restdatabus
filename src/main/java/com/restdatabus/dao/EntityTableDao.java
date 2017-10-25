@@ -7,5 +7,11 @@ public interface EntityTableDao {
 
     void createTable(EntityDefinition entityDefinition);
 
+    void deleteTable(EntityDefinition entityDefinition);
+
     void addColumn(FieldDefinition fieldDefinition, String dataType);
+
+    void removeColumn(FieldDefinition fieldDefinition);
+
+    void changeColumnType(FieldDefinition fieldDefinition, String newDataType);
 }

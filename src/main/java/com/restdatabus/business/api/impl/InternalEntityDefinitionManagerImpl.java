@@ -109,9 +109,14 @@ public class InternalEntityDefinitionManagerImpl {
             return false;
         }
 
+        // Delete fields
         fieldDefinitionService.deleteByEntityDefinition(entityDefinition.getId());
 
+        // Delete entity definition
         entityDefinitionService.delete(entityDefinition.getId());
+
+        // Delete table
+        entityTableService.deleteTable(entityDefinition);
 
         LOG.debug("< delete: {}", name);
 
@@ -186,6 +191,7 @@ public class InternalEntityDefinitionManagerImpl {
         fieldDefinition = entityDefinitionObjectMapper.toEntityObject(data);
         fieldDefinition.setEntityDefinitionId(entityDefinition.getId());
 
+        // Create field
         FieldDefinition persistedField = fieldDefinitionService.create(fieldDefinition);
 
         // Create column
@@ -251,6 +257,10 @@ public class InternalEntityDefinitionManagerImpl {
         // Persist changes
         FieldDefinition updatedField = fieldDefinitionService.update(existingFieldDefinition);
 
+        // Change column
+        String sqlType = fieldTypeService.findById(updatedField.getFieldTypeId()).getSqlType();
+        entityTableService.changeColumnType(updatedField, sqlType);
+
         LOG.debug("< updateField: {} -> {}", name, updatedField);
 
         return entityDefinitionObjectMapper.toDataObject(updatedField);
@@ -282,7 +292,11 @@ public class InternalEntityDefinitionManagerImpl {
             return false;
         }
 
+        // Delete field definition
         fieldDefinitionService.delete(fieldDefinition.getId());
+
+        // Delete column
+        entityTableService.removeColumn(fieldDefinition);
 
         LOG.debug("< deleteField: {}", name);
 

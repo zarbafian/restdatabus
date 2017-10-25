@@ -7,5 +7,11 @@ public interface EntityTableService {
 
     void createTable(EntityDefinition entityDefinition);
 
+    void deleteTable(EntityDefinition entityDefinition);
+
     void addColumn(FieldDefinition fieldDefinition, String dataType);
+
+    void changeColumnType(FieldDefinition fieldDefinition, String newDataType);
+
+    void removeColumn(FieldDefinition fieldDefinition);
 }
