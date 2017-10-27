@@ -34,23 +34,25 @@ INSERT INTO field_type (key, sql_type) VALUES ('integer', 'integer');
 INSERT INTO field_type (key, sql_type) VALUES ('decimal', 'double precision');
 INSERT INTO field_type (key, sql_type) VALUES ('file', 'bytea');
 INSERT INTO field_type (key, sql_type) VALUES ('entity', 'bigint');
+INSERT INTO field_type (key, sql_type) VALUES ('date', 'date');
+INSERT INTO field_type (key, sql_type) VALUES ('datetime', 'timestamp with time zone');
 --INSERT INTO field_type (key, sql_type) VALUES ('list');
 
 -- entity definitions
-INSERT INTO entity_definition (name) VALUES ('customer');
-INSERT INTO entity_definition (name) VALUES ('product');
-INSERT INTO entity_definition (name) VALUES ('invoice');
+--INSERT INTO entity_definition (name) VALUES ('customer');
+--INSERT INTO entity_definition (name) VALUES ('product');
+--INSERT INTO entity_definition (name) VALUES ('invoice');
 
 -- field definitions
 
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'firstname' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'lastname' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'address' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'firstname' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'lastname' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'address' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'customer' AND ft.key='text';
 
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'reference' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='text';
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'price' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='decimal';
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'quantity' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='integer';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'reference' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='text';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'price' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='decimal';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'quantity' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'product' AND ft.key='integer';
 
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'amount' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='decimal';
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'customer' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='text';
-INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'paid' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='yesno';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'amount' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='decimal';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'customer' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='text';
+--INSERT INTO field_definition (name, field_type_id, entity_definition_id) SELECT 'paid' , ft.id, ed.id FROM entity_definition ed, field_type ft WHERE ed.name = 'invoice' AND ft.key='yesno';

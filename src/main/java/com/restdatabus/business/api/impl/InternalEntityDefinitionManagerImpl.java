@@ -9,10 +9,9 @@ import com.restdatabus.model.data.transform.EntityDefinitionObjectMapper;
 import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
 import com.restdatabus.model.meta.FieldType;
-import com.restdatabus.model.service.EntityDefinitionService;
-import com.restdatabus.model.service.EntityTableService;
-import com.restdatabus.model.service.FieldDefinitionService;
-import com.restdatabus.model.service.FieldTypeService;
+import com.restdatabus.model.meta.RelationDefinition;
+import com.restdatabus.model.service.*;
+import com.restdatabus.web.api.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +48,9 @@ public class InternalEntityDefinitionManagerImpl {
 
     @Autowired
     private EntityTableService entityTableService;
+
+    @Autowired
+    private RelationDefinitionService relationDefinitionService;
 
     @Autowired
     EntityDefinitionObjectMapper entityDefinitionObjectMapper;

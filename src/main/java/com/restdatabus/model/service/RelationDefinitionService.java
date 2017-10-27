@@ -14,7 +14,7 @@ public interface RelationDefinitionService {
 
     RelationDefinition update(RelationDefinition relationDefinition);
 
-    RelationDefinition findBySourceAndTarget(Long source, Long target);
+    RelationDefinition findByField(Long field);
 
     /**
      * Provide a list of relation that are targeting target entity definition.

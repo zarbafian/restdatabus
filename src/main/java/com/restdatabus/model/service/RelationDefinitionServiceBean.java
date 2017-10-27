@@ -46,11 +46,11 @@ public class RelationDefinitionServiceBean implements RelationDefinitionService 
     }
 
     @Override
-    public RelationDefinition findBySourceAndTarget(Long source, Long target) {
+    public RelationDefinition findByField(Long fieldId) {
 
-        LOG.debug("findBySourceAndTarget: {} -> {}", source, target);
+        LOG.debug("findByField: {} -> {}", fieldId);
 
-        return definitionDao.findBySourceAndTarget(source, target);
+        return definitionDao.findByField(fieldId);
     }
 
     @Override

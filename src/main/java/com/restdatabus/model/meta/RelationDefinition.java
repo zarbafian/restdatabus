@@ -17,6 +17,9 @@ public class RelationDefinition {
      */
     private Long targetEntity;
 
+    public RelationDefinition() {
+    }
+
     public RelationDefinition(Long id, Long originField, Long targetEntity) {
         this.id = id;
         this.originField = originField;

@@ -28,6 +28,14 @@ public class EntityDefinitionServiceBean implements EntityDefinitionService {
     }
 
     @Override
+    public EntityDefinition findById(Long id) {
+
+        LOG.debug("findById: {}", id);
+
+        return definitionDao.findById(id);
+    }
+
+    @Override
     public EntityDefinition findByName(String name) {
 
         LOG.debug("findByName: {}", name);

@@ -19,6 +19,8 @@ public class EntityTableDaoJdbcImpl implements EntityTableDao {
     private static final String TABLE_PREFIX = "entity_";
     private static final String FIELD_PREFIX = "field_";
     private static final String ID_FIELD = "id";
+    private static final String FK_PREFIX = "fk_";
+    private static final String FK_IDX_PREFIX = "fki_";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -128,11 +130,65 @@ public class EntityTableDaoJdbcImpl implements EntityTableDao {
         );
     }
 
+    @Override
+    public void addForeignKey(FieldDefinition fieldDefinition) {
+
+        String tableName = tableName(fieldDefinition.getEntityDefinitionId());
+        String fieldName = fieldName(fieldDefinition.getId());
+        String targetTable = tableName(fieldDefinition.getTargetEntityId());
+        String constraintName = foreignKeyName(tableName, fieldName, targetTable);
+        String indexName = foreignKeyIndexName(tableName, fieldName, targetTable);
+
+        String sqlFk = "" +
+                "ALTER TABLE " + tableName +
+                "  ADD CONSTRAINT " + constraintName + " FOREIGN KEY (" + fieldName + ") REFERENCES " + targetTable + " (" + ID_FIELD + ") " +
+                "  ON UPDATE NO ACTION ON DELETE NO ACTION";
+
+        jdbcTemplate.execute(sqlFk);
+
+        String sqlIdx = "" +
+                "CREATE INDEX " + indexName + " " +
+                "  ON " + tableName + " USING btree (" + fieldName + ")";
+
+        jdbcTemplate.execute(sqlIdx);
+    }
+
+    @Override
+    public void removeIndexedForeignKey(FieldDefinition fieldDefinition) {
+
+        String tableName = tableName(fieldDefinition.getEntityDefinitionId());
+        String fieldName = fieldName(fieldDefinition.getId());
+        String targetTable = tableName(fieldDefinition.getTargetEntityId());
+        String constraintName = foreignKeyName(tableName, fieldName, targetTable);
+        String indexName = foreignKeyIndexName(tableName, fieldName, targetTable);
+
+        String sqlFk = "" +
+                "ALTER TABLE " + tableName +
+                "  DROP CONSTRAINT " + constraintName;
+
+        jdbcTemplate.execute(sqlFk);
+
+        String sqlIdx = "" +
+                "DROP INDEX " + indexName;
+
+        jdbcTemplate.execute(sqlIdx);
+    }
+
     private String fieldName(Long fieldDefinitionId) {
         return FIELD_PREFIX + fieldDefinitionId;
     }
 
     private String tableName(Long entityDefinitionId) {
         return TABLE_PREFIX + entityDefinitionId;
+    }
+
+    private String foreignKeyName(String tableName, String fieldName, String targetTable) {
+        return FK_PREFIX + relationName(tableName, fieldName, targetTable);
+    }
+    private String foreignKeyIndexName(String tableName, String fieldName, String targetTable) {
+        return FK_IDX_PREFIX + relationName(tableName, fieldName, targetTable);
+    }
+    private String relationName(String tableName, String fieldName, String targetTable) {
+        return tableName + "_" + fieldName + "_" + targetTable;
     }
 }

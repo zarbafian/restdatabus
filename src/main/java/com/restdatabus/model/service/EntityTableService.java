@@ -14,4 +14,8 @@ public interface EntityTableService {
     void changeColumnType(FieldDefinition fieldDefinition, String newDataType);
 
     void removeColumn(FieldDefinition fieldDefinition);
+
+    void addIndexedForeignKey(FieldDefinition fieldDefinition);
+
+    void removeIndexedForeignKey(FieldDefinition fieldDefinition);
 }

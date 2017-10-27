@@ -113,18 +113,18 @@ public class RelationDefinitionDaoJdbc implements RelationDefinitionDao {
     }
 
     @Override
-    public RelationDefinition findBySourceAndTarget(Long fieldDefinitionId, Long entityDefinitionId) {
+    public RelationDefinition findByField(Long fieldDefinitionId) {
 
-        LOG.debug("> findBySourceAndTarget: {} -> {}", fieldDefinitionId, entityDefinitionId);
+        LOG.debug("> findByField: {} -> {}", fieldDefinitionId);
 
         List<RelationDefinition> results = jdbcTemplate.query(
 
-                "SELECT rd.id, rd.field_definition_id, rd.entity_definition_id FROM relation_definition rd WHERE rd.field_definition_id=? AND rd.entity_definition_id=?",
-                new Object[]{ fieldDefinitionId, entityDefinitionId },
+                "SELECT rd.id, rd.field_definition_id, rd.entity_definition_id FROM relation_definition rd WHERE rd.field_definition_id=?",
+                new Object[]{ fieldDefinitionId },
                 new RelationDefinitionRowMapper()
         );
 
-        LOG.debug("< findBySourceAndTarget: found {} relation definitions(s)", results.size());
+        LOG.debug("< findByField: found {} relation definitions(s)", results.size());
 
         if(results.isEmpty()) {
             return null;

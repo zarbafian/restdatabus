@@ -55,4 +55,20 @@ public class EntityTableServiceBean implements EntityTableService {
 
         entityTableDao.removeColumn(fieldDefinition);
     }
+
+    @Override
+    public void addIndexedForeignKey(FieldDefinition fieldDefinition) {
+
+        LOG.debug("addIndexedForeignKey: {}", fieldDefinition);
+
+        entityTableDao.addForeignKey(fieldDefinition);
+    }
+
+    @Override
+    public void removeIndexedForeignKey(FieldDefinition fieldDefinition) {
+
+        LOG.debug("removeIndexedForeignKey: {}", fieldDefinition);
+
+        entityTableDao.removeIndexedForeignKey(fieldDefinition);
+    }
 }

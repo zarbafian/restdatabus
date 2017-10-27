@@ -14,4 +14,8 @@ public interface EntityTableDao {
     void removeColumn(FieldDefinition fieldDefinition);
 
     void changeColumnType(FieldDefinition fieldDefinition, String newDataType);
+
+    void addForeignKey(FieldDefinition fieldDefinition);
+
+    void removeIndexedForeignKey(FieldDefinition fieldDefinition);
 }

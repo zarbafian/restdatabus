@@ -161,7 +161,8 @@ CREATE TABLE relation_definition
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_relation_field_id FOREIGN KEY (field_definition_id)
       REFERENCES field_definition (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT uq_relation_field UNIQUE (field_definition_id)
 )
 WITH (
   OIDS=FALSE

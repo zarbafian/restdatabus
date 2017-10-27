@@ -11,6 +11,8 @@ public interface EntityDefinitionService {
 
     EntityDefinition create(EntityDefinition entityDefinition);
 
+    EntityDefinition findById(Long id);
+
     EntityDefinition findByName(String name);
 
     List<EntityDefinition> findAll();

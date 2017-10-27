@@ -56,19 +56,42 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
     }
 
     @Override
+    public EntityDefinition findById(Long id) {
+
+        LOG.debug("> findById: {}", id);
+
+        return findByUniqueKey(
+
+                "SELECT ed.id, ed.name FROM entity_definition ed WHERE ed.id=?",
+                new Object[]{id}
+        );
+    }
+
+    @Override
     public EntityDefinition findByName(String name) {
 
         LOG.debug("> findByName: {}", name);
 
-        List<EntityDefinition> results = jdbcTemplate.query(
+        return findByUniqueKey(
 
                 "SELECT ed.id, ed.name FROM entity_definition ed WHERE ed.name=?",
-                new Object[]{name},
+                new Object[]{name}
+        );
+    }
+
+    public <T> EntityDefinition findByUniqueKey(String sql, Object[] params) {
+
+        LOG.debug("> findByUniqueKey: {} -> ", sql, params);
+
+        List<EntityDefinition> results = jdbcTemplate.query(
+
+                sql,
+                params,
                 new EntityDefinitionRowMapper()
         );
 
 
-        LOG.debug("= findByName - found: {}", results);
+        LOG.debug("= findByUniqueKey - found: {}", results);
 
         if(results.isEmpty()) {
             return null;
@@ -78,7 +101,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
 
         List<FieldDefinition> fieldDefinitions = fieldDefinitionDao.findByEntityDefinition(loadedEntity);
 
-        LOG.debug("= findByName - fields: {}", fieldDefinitions);
+        LOG.debug("= findByUniqueKey - fields: {}", fieldDefinitions);
 
         loadedEntity.setDefinitions(fieldDefinitions);
 

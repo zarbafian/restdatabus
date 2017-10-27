@@ -11,7 +11,7 @@ public interface RelationDefinitionDao {
 
     RelationDefinition update(RelationDefinition relationDefinition);
 
-    RelationDefinition findBySourceAndTarget(Long source, Long target);
+    RelationDefinition findByField(Long fieldId);
 
     List<RelationDefinition> findByEntityDefinition(EntityDefinition entityDefinition);
 

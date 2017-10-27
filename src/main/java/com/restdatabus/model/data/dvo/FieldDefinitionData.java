@@ -8,6 +8,8 @@ public class FieldDefinitionData implements Serializable {
 
     private FieldTypeData fieldType;
 
+    private String targetEntity;
+
     public FieldDefinitionData() {
     }
 
@@ -32,11 +34,25 @@ public class FieldDefinitionData implements Serializable {
         this.fieldType = fieldType;
     }
 
+    public void setFieldType(FieldTypeData fieldType) {
+        this.fieldType = fieldType;
+    }
+
+    public String getTargetEntity() {
+        return targetEntity;
+    }
+
     @Override
     public String toString() {
         return "FieldDefinitionData{" +
                 "name='" + name + '\'' +
-                ", fieldType='" + fieldType + '\'' +
+                ", fieldType=" + fieldType +
+                ", targetEntity='" + targetEntity + '\'' +
                 '}';
     }
+
+    public void setTargetEntity(String targetEntity) {
+        this.targetEntity = targetEntity;
+    }
+
 }

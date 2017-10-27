@@ -62,7 +62,10 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         List<FieldDefinition> results = jdbcTemplate.query(
 
-                "SELECT fd.id, fd.name, fd.field_type_id, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=?",
+                "SELECT fd.id, fd.name, fd.field_type_id, fd.entity_definition_id, rd.entity_definition_id   " +
+                     "FROM field_definition fd " +
+                     "LEFT JOIN relation_definition rd ON fd.id=rd.field_definition_id " +
+                     "WHERE fd.entity_definition_id=?",
                 new Object[]{ entityDefinition.getId() },
                 new FieldDefinitionRowMapper()
         );
@@ -120,7 +123,10 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
 
         List<FieldDefinition> results = jdbcTemplate.query(
 
-                "SELECT fd.id, fd.name, fd.field_type_id, fd.entity_definition_id FROM field_definition fd WHERE fd.entity_definition_id=? AND fd.name=?",
+                "SELECT fd.id, fd.name, fd.field_type_id, fd.entity_definition_id, rd.entity_definition_id " +
+                     "FROM field_definition fd " +
+                     "LEFT JOIN relation_definition rd ON fd.id=rd.field_definition_id " +
+                     "WHERE fd.entity_definition_id=? AND fd.name=?",
                 new Object[]{ entityDefinitionId, fieldName },
                 new FieldDefinitionRowMapper()
         );
@@ -143,12 +149,14 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
             String name = resultSet.getString(2);
             Long fieldTypeId = resultSet.getLong(3);
             Long entityDefId = resultSet.getLong(4);
+            Long targetEntityId = resultSet.getLong(5);
 
             FieldDefinition fieldDefinition = new FieldDefinition();
             fieldDefinition.setId(id);
             fieldDefinition.setName(name);
             fieldDefinition.setFieldTypeId(fieldTypeId);
             fieldDefinition.setEntityDefinitionId(entityDefId);
+            fieldDefinition.setTargetEntityId(targetEntityId);
 
             return fieldDefinition;
         }

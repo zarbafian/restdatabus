@@ -15,4 +15,6 @@ public interface EntityDefinitionDao {
     void delete(Long id);
 
     EntityDefinition update(EntityDefinition entityDefinition);
+
+    EntityDefinition findById(Long id);
 }

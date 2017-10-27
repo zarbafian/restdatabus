@@ -4,6 +4,9 @@ public class Constants {
 
     private Constants() {}
 
+    // Field types
+    public static final String FIELD_TYPE_ENTITY = "entity";
+
     public static final String API = "/api";
     public static final String ADMIN = "/admin";
 

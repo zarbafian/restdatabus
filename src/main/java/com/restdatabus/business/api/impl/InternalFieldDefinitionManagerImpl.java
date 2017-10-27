@@ -1,13 +1,11 @@
 package com.restdatabus.business.api.impl;
 
 import com.restdatabus.model.data.transform.EntityDefinitionObjectMapper;
-import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
 import com.restdatabus.model.meta.FieldType;
-import com.restdatabus.model.service.EntityDefinitionService;
-import com.restdatabus.model.service.EntityTableService;
-import com.restdatabus.model.service.FieldDefinitionService;
-import com.restdatabus.model.service.FieldTypeService;
+import com.restdatabus.model.meta.RelationDefinition;
+import com.restdatabus.model.service.*;
+import com.restdatabus.web.api.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,9 @@ public class InternalFieldDefinitionManagerImpl {
     private FieldTypeService fieldTypeService;
 
     @Autowired
+    private RelationDefinitionService relationDefinitionService;
+
+    @Autowired
     EntityDefinitionObjectMapper entityDefinitionObjectMapper;
 
     @Autowired
@@ -48,8 +49,22 @@ public class InternalFieldDefinitionManagerImpl {
         String sqlType = fieldType.getSqlType();
         entityTableService.addColumn(persistedField, sqlType);
 
-        // TODO
         // Create relation if applicable
+        if(fieldType.getKey().equals(Constants.FIELD_TYPE_ENTITY)) {
+
+            LOG.debug("____________________________________________________________________");
+            LOG.debug("Adding entity field for entity: {}", fieldDefinition.getTargetEntityId() );
+            LOG.debug("____________________________________________________________________");
+
+            // Add foreign key - not null
+            RelationDefinition relationDefinition = new RelationDefinition();
+            relationDefinition.setOriginField(persistedField.getId());
+            relationDefinition.setTargetEntity(fieldDefinition.getTargetEntityId());
+            relationDefinitionService.insert(relationDefinition);
+
+            // Add integrity constraint
+            entityTableService.addIndexedForeignKey(persistedField);
+        }
 
         return persistedField;
     }
@@ -58,14 +73,37 @@ public class InternalFieldDefinitionManagerImpl {
 
         LOG.debug("> delete: {}", fieldDefinition);
 
-        // Delete field definition
-        fieldDefinitionService.delete(fieldDefinition.getId());
-
         // TODO
         // Remove relation if applicable
+        FieldType fieldType = fieldTypeService.findById(fieldDefinition.getFieldTypeId());
+        if(fieldType.getKey().equals(Constants.FIELD_TYPE_ENTITY)) {
+
+            LOG.debug("____________________________________________________________________");
+            LOG.debug("Deleted entity field for entity: {}", fieldDefinition.getTargetEntityId() );
+            LOG.debug("____________________________________________________________________");
+
+
+            RelationDefinition relationDefinition = relationDefinitionService.findByField(fieldDefinition.getId());
+            if(relationDefinition == null) {
+                String msg = "relation definition is null for field " + fieldDefinition.getId();
+                LOG.error(msg);
+                throw new IllegalStateException(msg);
+            }
+
+            fieldDefinition.setTargetEntityId(relationDefinition.getTargetEntity());
+
+            //RelationDefinition relationDefinition =
+            relationDefinitionService.deleteByFieldId(fieldDefinition.getId());
+
+            // Remove foreign key and index
+            entityTableService.removeIndexedForeignKey(fieldDefinition);
+        }
 
         // Delete column
         entityTableService.removeColumn(fieldDefinition);
+
+        // Delete field definition
+        fieldDefinitionService.delete(fieldDefinition.getId());
 
         LOG.debug("< delete: {}", fieldDefinition);
     }
@@ -84,6 +122,11 @@ public class InternalFieldDefinitionManagerImpl {
 
         // TODO
         // Add or remove relation if applicable
+        if(fieldType.getKey().equals(Constants.FIELD_TYPE_ENTITY)) {
+            LOG.debug("____________________________________________________________________");
+            LOG.debug("Updated entity field for entity: {}", fieldDefinition.getTargetEntityId() );
+            LOG.debug("____________________________________________________________________");
+        }
 
         return updatedField;
     }

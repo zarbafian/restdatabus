@@ -25,24 +25,20 @@ public class FieldDefinition {
      */
     private Long entityDefinitionId;
 
+    /**
+     * The identifier of the entity definition that is the target of this relation.
+     */
+    private Long targetEntityId;
+
     public FieldDefinition() {
     }
 
     public FieldDefinition(FieldDefinition definition) {
         this.id = definition.getId();
         this.name = definition.getName();
-        this.setFieldTypeId(definition.getFieldTypeId());
-        this.setEntityDefinitionId(definition.getEntityDefinitionId());
-    }
-
-    @Override
-    public String toString() {
-        return "FieldDefinition{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", fieldTypeId=" + fieldTypeId +
-                ", entityDefinitionId=" + entityDefinitionId +
-                '}';
+        this.fieldTypeId = definition.getFieldTypeId();
+        this.entityDefinitionId = definition.getEntityDefinitionId();
+        this.targetEntityId = definition.getTargetEntityId();
     }
 
     public Long getId() {
@@ -75,5 +71,24 @@ public class FieldDefinition {
 
     public void setEntityDefinitionId(Long entityDefinitionId) {
         this.entityDefinitionId = entityDefinitionId;
+    }
+
+    @Override
+    public String toString() {
+        return "FieldDefinition{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", fieldTypeId=" + fieldTypeId +
+                ", entityDefinitionId=" + entityDefinitionId +
+                ", targetEntityId=" + targetEntityId +
+                '}';
+    }
+
+    public Long getTargetEntityId() {
+        return targetEntityId;
+    }
+
+    public void setTargetEntityId(Long targetEntityId) {
+        this.targetEntityId = targetEntityId;
     }
 }
