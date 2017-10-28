@@ -86,7 +86,7 @@ public class EntityDefinitionObjectMapper {
 
     public FieldDefinition toEntityObject(FieldDefinitionData data) {
 
-        LOG.debug("toEntityObject: {}", data);
+        LOG.debug("> toEntityObject: {}", data);
 
         FieldType fieldType = fieldTypeService.findByKey(data.getFieldType().getKey());
 
@@ -98,6 +98,8 @@ public class EntityDefinitionObjectMapper {
                     entityDefinitionService.findByName(data.getTargetEntity()).getId()
             );
         }
+
+        LOG.debug("< toEntityObject: {}", definition);
 
         return definition;
     }

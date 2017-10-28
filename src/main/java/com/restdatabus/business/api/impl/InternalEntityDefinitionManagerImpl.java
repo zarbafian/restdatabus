@@ -228,6 +228,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         // Check that field exist
         FieldDefinition existingFieldDefinition = fieldDefinitionService.findByDefinitionAndName(entityDefinition.getId(), field);
+
         if(existingFieldDefinition == null) {
 
             String msg = fieldDoesNotExist(name, field);
@@ -249,13 +250,15 @@ public class InternalEntityDefinitionManagerImpl {
                 LOG.error(msg);
                 throw new IllegalArgumentException(msg);
             }
-        } else {
-            LOG.debug("new field name available: {}.{} -> {}.{}", name, field, name, newData.getName());
+            else {
+                LOG.debug("new field name available: {}.{} -> {}.{}", name, field, name, newData.getName());
+            }
         }
 
         // Transfer new data to existing field definition
         existingFieldDefinition.setName(newData.getName());
         existingFieldDefinition.setFieldTypeId(newData.getFieldTypeId());
+        existingFieldDefinition.setTargetEntityId(newData.getTargetEntityId());
 
         // Persist changes
         FieldDefinition updatedField = fieldImpl.update(existingFieldDefinition);

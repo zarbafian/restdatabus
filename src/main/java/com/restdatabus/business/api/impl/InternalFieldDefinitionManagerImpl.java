@@ -56,17 +56,22 @@ public class InternalFieldDefinitionManagerImpl {
             LOG.debug("Adding entity field for entity: {}", fieldDefinition.getTargetEntityId() );
             LOG.debug("____________________________________________________________________");
 
-            // Add foreign key - not null
-            RelationDefinition relationDefinition = new RelationDefinition();
-            relationDefinition.setOriginField(persistedField.getId());
-            relationDefinition.setTargetEntity(fieldDefinition.getTargetEntityId());
-            relationDefinitionService.insert(relationDefinition);
-
-            // Add integrity constraint
-            entityTableService.addIndexedForeignKey(persistedField);
+            addEntityField(persistedField);
         }
 
         return persistedField;
+    }
+
+    private void addEntityField(FieldDefinition fieldDefinition) {
+
+        // Add foreign key - not null
+        RelationDefinition relationDefinition = new RelationDefinition();
+        relationDefinition.setOriginField(fieldDefinition.getId());
+        relationDefinition.setTargetEntity(fieldDefinition.getTargetEntityId());
+        relationDefinitionService.insert(relationDefinition);
+
+        // Add integrity constraint
+        entityTableService.addIndexedForeignKey(fieldDefinition);
     }
 
     public void delete(FieldDefinition fieldDefinition) {
@@ -82,21 +87,7 @@ public class InternalFieldDefinitionManagerImpl {
             LOG.debug("Deleted entity field for entity: {}", fieldDefinition.getTargetEntityId() );
             LOG.debug("____________________________________________________________________");
 
-
-            RelationDefinition relationDefinition = relationDefinitionService.findByField(fieldDefinition.getId());
-            if(relationDefinition == null) {
-                String msg = "relation definition is null for field " + fieldDefinition.getId();
-                LOG.error(msg);
-                throw new IllegalStateException(msg);
-            }
-
-            fieldDefinition.setTargetEntityId(relationDefinition.getTargetEntity());
-
-            //RelationDefinition relationDefinition =
-            relationDefinitionService.deleteByFieldId(fieldDefinition.getId());
-
-            // Remove foreign key and index
-            entityTableService.removeIndexedForeignKey(fieldDefinition);
+            removeEntityField(fieldDefinition);
         }
 
         // Delete column
@@ -108,25 +99,101 @@ public class InternalFieldDefinitionManagerImpl {
         LOG.debug("< delete: {}", fieldDefinition);
     }
 
-    public FieldDefinition update(FieldDefinition fieldDefinition) {
+    private void removeEntityField(FieldDefinition fieldDefinition) {
 
-        LOG.debug("> update: {}", fieldDefinition);
+        RelationDefinition relationDefinition = relationDefinitionService.findByField(fieldDefinition.getId());
+
+        if(relationDefinition == null) {
+            String msg = "relation definition is null for field " + fieldDefinition.getId();
+            LOG.error(msg);
+            throw new IllegalArgumentException(msg);
+        }
+
+        fieldDefinition.setTargetEntityId(relationDefinition.getTargetEntity());
+
+        //RelationDefinition relationDefinition =
+        relationDefinitionService.deleteByFieldId(fieldDefinition.getId());
+
+        // Remove foreign key and index
+        entityTableService.removeIndexedForeignKey(fieldDefinition);
+    }
+
+    public FieldDefinition update(FieldDefinition newFieldDefinition) {
+
+        LOG.debug("> update: {}", newFieldDefinition);
+
+        // Check if change to or from entity type, or a change in target entity
+        FieldDefinition existingField = fieldDefinitionService.findByDefinitionAndName(newFieldDefinition.getEntityDefinitionId(), newFieldDefinition.getName());
+
+        LOG.debug("> update (existing data): {}", existingField);
+
+        // Load field type
+        FieldType oldFieldType = fieldTypeService.findById(existingField.getFieldTypeId());
+        FieldType newFieldType = fieldTypeService.findById(newFieldDefinition.getFieldTypeId());
+
+        // Change in field type ?
+        if( ! newFieldDefinition.getFieldTypeId().equals(existingField.getFieldTypeId()) ) {
+
+            // 1 - Yes
+
+            // 1.1 - Changed from basic to entity ?
+            if (Constants.FIELD_TYPE_ENTITY.equals(newFieldType.getKey())) {
+
+                // Yes
+                LOG.debug("____________________________________________________________________");
+                LOG.debug("Updated to entity field for entity: {}", newFieldDefinition.getTargetEntityId());
+                LOG.debug("____________________________________________________________________");
+
+                // Add specific stuff
+                addEntityField(newFieldDefinition);
+            }
+
+            // 1.2 - Change from entity to basic ?
+            else if(Constants.FIELD_TYPE_ENTITY.equals(oldFieldType.getKey())) {
+
+                // Yes
+                LOG.debug("____________________________________________________________________");
+                LOG.debug("Updated to basic field from entity: {}", existingField.getTargetEntityId());
+                LOG.debug("____________________________________________________________________");
+
+                // Remove specific stuff
+                removeEntityField(existingField);
+            }
+
+            // 1.3 - Change from basic to basic
+            else {
+
+                LOG.debug("____________________________________________________________________");
+                LOG.debug("Updated from basic to basic");
+                LOG.debug("____________________________________________________________________");
+
+                // Nothing specific to do
+            }
+
+            // Change column
+            String sqlType = newFieldType.getSqlType();
+            entityTableService.changeColumnType(newFieldDefinition, sqlType);
+        }
+        else if(
+                // Entity to entiy
+                ( Constants.FIELD_TYPE_ENTITY.equals(newFieldType.getKey()) )
+        &&
+                ( Constants.FIELD_TYPE_ENTITY.equals(oldFieldType.getKey()) )
+        &&
+                ( ! existingField.getTargetEntityId().equals(newFieldDefinition.getTargetEntityId()) )
+        ) {
+            // 2 - Change in target entity type
+
+            LOG.debug("____________________________________________________________________");
+            LOG.debug("Updated from entity to entity: {} -> {}", existingField.getTargetEntityId(), newFieldDefinition.getTargetEntityId());
+            LOG.debug("____________________________________________________________________");
+
+            removeEntityField(existingField);
+            addEntityField(newFieldDefinition);
+        }
 
         // Persist changes
-        FieldDefinition updatedField = fieldDefinitionService.update(fieldDefinition);
-
-        // Change column
-        FieldType fieldType = fieldTypeService.findById(updatedField.getFieldTypeId());
-        String sqlType = fieldType.getSqlType();
-        entityTableService.changeColumnType(updatedField, sqlType);
-
-        // TODO
-        // Add or remove relation if applicable
-        if(fieldType.getKey().equals(Constants.FIELD_TYPE_ENTITY)) {
-            LOG.debug("____________________________________________________________________");
-            LOG.debug("Updated entity field for entity: {}", fieldDefinition.getTargetEntityId() );
-            LOG.debug("____________________________________________________________________");
-        }
+        FieldDefinition updatedField = fieldDefinitionService.update(newFieldDefinition);
 
         return updatedField;
     }
