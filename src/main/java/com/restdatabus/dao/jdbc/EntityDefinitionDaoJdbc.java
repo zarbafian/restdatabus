@@ -79,7 +79,7 @@ public class EntityDefinitionDaoJdbc implements EntityDefinitionDao {
         );
     }
 
-    public <T> EntityDefinition findByUniqueKey(String sql, Object[] params) {
+    public EntityDefinition findByUniqueKey(String sql, Object[] params) {
 
         LOG.debug("> findByUniqueKey: {} -> ", sql, params);
 

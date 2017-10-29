@@ -2,6 +2,8 @@ package com.restdatabus.dao.jdbc.sql;
 
 public class SqlConstants {
 
+    private SqlConstants() {}
+
     public static final String ID_FIELD = "id";
 
     public static final String OWNER = "restdatabus";

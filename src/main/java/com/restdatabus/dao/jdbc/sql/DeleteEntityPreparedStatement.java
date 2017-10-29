@@ -27,8 +27,6 @@ public class DeleteEntityPreparedStatement extends AbstractEntityPreparedStateme
 
         LOG.debug("> buildSqlTemplate: {}", getEntityDefinition());
 
-        boolean includeId = true;
-
         StringBuilder part1 = new StringBuilder("DELETE FROM " + tableName(getEntityDefinition().getId()));
         part1.append(" WHERE " + ID_FIELD + "=?");
 

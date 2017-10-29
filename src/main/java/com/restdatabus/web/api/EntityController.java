@@ -20,10 +20,6 @@ public class EntityController {
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityController.class);
 
-    private static final String FIELD_ID = "id";
-    private static final String FIELD_TYPE = "type";
-    private static final String FIELD_DATA = "data";
-
     @Autowired
     private InternalEntityManagerImpl imp;
 

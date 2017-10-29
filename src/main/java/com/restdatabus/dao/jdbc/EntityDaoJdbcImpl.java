@@ -22,9 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static com.restdatabus.dao.jdbc.sql.SqlConstants.tableName;
 
 @Service
 public class EntityDaoJdbcImpl implements EntityDao {
@@ -135,7 +132,6 @@ public class EntityDaoJdbcImpl implements EntityDao {
 
         public EntityRowMapper(FieldTypeService fieldTypeService, AbstractEntityPreparedStatement entityDefinition) {
 
-            this.fieldTypeService = fieldTypeService;
             this.abstractEntityPreparedStatement = entityDefinition;
             this.fieldsTpl = new ArrayList<>();
 
@@ -173,8 +169,6 @@ public class EntityDaoJdbcImpl implements EntityDao {
 
                 index++;
             }
-
-            Map<Long, Object> values = null;
 
             Entity entity = new Entity();
             entity.setId(id);

@@ -28,10 +28,8 @@ public class UpdateEntityPreparedStatement extends AbstractEntityPreparedStateme
 
         LOG.debug("> buildSqlTemplate: {}", getEntityDefinition());
 
-        boolean includeId = false;
-
         StringBuilder part1 = new StringBuilder("UPDATE " + tableName(getEntityDefinition().getId()) + " SET ");
-        part1.append(buildUpdateFields(getEntityDefinition(), entity));
+        part1.append(buildUpdateFields(entity));
         part1.append(" WHERE id=?");
 
         String sql = part1.toString();
@@ -41,7 +39,7 @@ public class UpdateEntityPreparedStatement extends AbstractEntityPreparedStateme
         return sql;
     }
 
-    private String buildUpdateFields(EntityDefinition entityDefinition, Entity entity) {
+    private String buildUpdateFields(Entity entity) {
 
         StringBuilder sb = new StringBuilder();
 

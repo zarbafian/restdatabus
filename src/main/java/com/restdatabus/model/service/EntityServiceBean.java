@@ -2,7 +2,6 @@ package com.restdatabus.model.service;
 
 import com.restdatabus.dao.EntityDao;
 import com.restdatabus.model.data.Entity;
-import com.restdatabus.model.data.dvo.EntityData;
 import com.restdatabus.model.meta.EntityDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

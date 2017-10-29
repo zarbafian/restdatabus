@@ -1,8 +1,6 @@
 package com.restdatabus.model.data.dvo;
 
-import java.io.Serializable;
-
-public class FieldDefinitionData implements Serializable {
+public class FieldDefinitionData {
 
     private String name;
 

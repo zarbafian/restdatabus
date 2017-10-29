@@ -142,9 +142,7 @@ public class RelationDefinitionDaoJdbc implements RelationDefinitionDao {
             Long fieldDefId = resultSet.getLong(2);
             Long entityDefId = resultSet.getLong(3);
 
-            RelationDefinition relationDefinition = new RelationDefinition(id, fieldDefId, entityDefId);
-
-            return relationDefinition;
+            return new RelationDefinition(id, fieldDefId, entityDefId);
         }
     }
 }

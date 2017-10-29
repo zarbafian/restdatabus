@@ -179,8 +179,6 @@ public class InternalFieldDefinitionManagerImpl {
         }
 
         // Persist changes
-        FieldDefinition updatedField = fieldDefinitionService.update(newFieldDefinition);
-
-        return updatedField;
+        return fieldDefinitionService.update(newFieldDefinition);
     }
 }

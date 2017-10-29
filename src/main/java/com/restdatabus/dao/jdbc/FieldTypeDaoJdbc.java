@@ -44,9 +44,7 @@ public class FieldTypeDaoJdbc implements FieldTypeDao {
             return null;
         }
 
-        FieldType loadedEntity = results.get(0);
-
-        return loadedEntity;
+        return results.get(0);
     }
 
     @Override
@@ -68,9 +66,7 @@ public class FieldTypeDaoJdbc implements FieldTypeDao {
             return null;
         }
 
-        FieldType loadedEntity = results.get(0);
-
-        return loadedEntity;
+        return results.get(0);
     }
 
     @Override
