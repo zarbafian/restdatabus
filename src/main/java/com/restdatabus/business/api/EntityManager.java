@@ -13,4 +13,6 @@ public interface EntityManager {
     EntityData findByTypeAndId(String type, Long id);
 
     void deleteByTypeAndId(String type, Long id);
+
+    EntityData update(String type, Long id, EntityData data);
 }

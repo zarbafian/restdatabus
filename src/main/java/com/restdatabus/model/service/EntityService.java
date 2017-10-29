@@ -17,4 +17,6 @@ public interface EntityService {
     Entity findByDefinitionAndId(EntityDefinition entityDefinition, Long id);
 
     void deleteByDefinitionAndId(EntityDefinition entityDefinition, Long id);
+
+    Entity update(EntityDefinition entityDefinition, Long id, Entity entity);
 }

@@ -116,8 +116,6 @@ public class InternalEntityManagerImpl {
         }
 
         return entityObjectMapper.toDataObject(entity, entityDefinition);
-
-
     }
 
     public boolean deleteByTypeAndId(String type, Long id) {
@@ -140,5 +138,34 @@ public class InternalEntityManagerImpl {
         entityService.deleteByDefinitionAndId(entityDefinition, id);
 
         return true;
+    }
+
+    public EntityData update(String type, Long id, EntityData data) {
+
+        LOG.debug("> update: {}.{} -> {}", type, id, data);
+
+        EntityDefinition entityDefinition = entityDefinitionService.findByName(type);
+
+        // Check type
+        if(entityDefinition == null) {
+            entityTypeNotExist(type);
+        }
+
+        Entity entity = entityService.findByDefinitionAndId(entityDefinition, id);
+
+        if(entity == null) {
+            entityNotExist(entityDefinition.getName(), id);
+        }
+
+        Entity newData = entityObjectMapper.toEntityObject(data, entityDefinition);
+        entity.setFields(newData.getFields());
+
+        Entity updatedEntity = entityService.update(entityDefinition, id, entity);
+
+        EntityData updatedData = entityObjectMapper.toDataObject(updatedEntity, entityDefinition);
+
+        LOG.debug("< update: {}.{} -> {}", type, id, updatedData);
+
+        return updatedData;
     }
 }

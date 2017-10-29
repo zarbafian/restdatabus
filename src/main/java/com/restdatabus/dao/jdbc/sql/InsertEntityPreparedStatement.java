@@ -28,8 +28,7 @@ public class InsertEntityPreparedStatement extends AbstractEntityPreparedStateme
 
         boolean includeId = false;
 
-        StringBuilder part1 = new StringBuilder("INSERT INTO entity_");
-        part1.append(getEntityDefinition().getId());
+        StringBuilder part1 = new StringBuilder("INSERT INTO " + tableName(getEntityDefinition().getId()));
         part1.append("(");
         part1.append(getFieldsList(includeId));
         part1.append(") VALUES(");

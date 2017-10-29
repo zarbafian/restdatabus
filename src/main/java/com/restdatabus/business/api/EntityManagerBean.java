@@ -106,4 +106,31 @@ public class EntityManagerBean implements EntityManager {
             );
         }
     }
+
+    @Override
+    public EntityData update(String type, Long id, EntityData data) {
+
+        LOG.debug("update: {}.{} -> {}", type, id, data);
+
+        // Check permissions
+        accessControlManager.hasPermission("/entities/" + type + "/" + id, Action.UPDATE); // TODO
+
+        EntityData existingData = this.impl.findByTypeAndId(type, id);
+
+        EntityData updatedData = this.impl.update(type, id, data);
+
+        boolean dataChanged = !existingData.equals(updatedData);
+
+        if(dataChanged) {
+            // Notify event
+            eventNotificationManager.push(
+                    "/entities/" + type + "/" + id, // TODO
+                    Action.UPDATE,
+                    null,
+                    data
+            );
+        }
+
+        return updatedData;
+    }
 }

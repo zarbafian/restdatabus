@@ -73,8 +73,6 @@ public class EntityController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-
-
     @RequestMapping(
             value = ENTITY_BY_ID,
             method = RequestMethod.DELETE
@@ -88,4 +86,20 @@ public class EntityController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
+
+    @RequestMapping(
+            value = ENTITY_BY_ID,
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<EntityData> update(@PathVariable(value = "id") Long id, @RequestParam(value = "type") String type, @RequestBody EntityData data) {
+
+        LOG.debug("update: {}, {}", id, data);
+
+        EntityData updatedData = entityManager.update(type, id, data);
+
+        return new ResponseEntity<>(updatedData, HttpStatus.OK);
+    }
 }

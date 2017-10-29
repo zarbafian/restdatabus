@@ -1,9 +1,7 @@
 package com.restdatabus.dao.jdbc;
 
 import com.restdatabus.dao.EntityDao;
-import com.restdatabus.dao.jdbc.sql.DeleteEntityPreparedStatement;
-import com.restdatabus.dao.jdbc.sql.InsertEntityPreparedStatement;
-import com.restdatabus.dao.jdbc.sql.SelectEntityPreparedStatement;
+import com.restdatabus.dao.jdbc.sql.*;
 import com.restdatabus.model.data.Entity;
 import com.restdatabus.model.data.Field;
 import com.restdatabus.model.data.types.FieldFactory;
@@ -112,20 +110,36 @@ public class EntityDaoJdbcImpl implements EntityDao {
         );
     }
 
+    @Override
+    public Entity update(EntityDefinition entityDefinition, Long id, Entity entity) {
+
+        LOG.debug("> update: {}.{} -> ", entityDefinition.getName(), id, entity);
+
+        UpdateEntityPreparedStatement updateEntityPreparedStatement = new UpdateEntityPreparedStatement(entityDefinition, entity);
+
+        int result = jdbcTemplate.update(
+                updateEntityPreparedStatement
+        );
+        LOG.debug("> update result: {}", result);
+
+        return entity;
+    }
+
     private static class EntityRowMapper implements RowMapper<Entity> {
 
-        private SelectEntityPreparedStatement selectEntityPreparedStatement;
+        private AbstractEntityPreparedStatement abstractEntityPreparedStatement;
 
         private FieldTypeService fieldTypeService;
 
         private List<Field> fieldsTpl;
 
-        public EntityRowMapper(FieldTypeService fieldTypeService, SelectEntityPreparedStatement entityDefinition) {
-            //this.fieldTypeService = fieldTypeService;
-            this.selectEntityPreparedStatement = entityDefinition;
+        public EntityRowMapper(FieldTypeService fieldTypeService, AbstractEntityPreparedStatement entityDefinition) {
+
+            this.fieldTypeService = fieldTypeService;
+            this.abstractEntityPreparedStatement = entityDefinition;
             this.fieldsTpl = new ArrayList<>();
 
-            List<FieldDefinition> defs = selectEntityPreparedStatement.getEntityDefinition().getDefinitions();
+            List<FieldDefinition> defs = abstractEntityPreparedStatement.getEntityDefinition().getDefinitions();
 
             for (int i = 0; i < defs.size(); i++) {
 
@@ -142,7 +156,7 @@ public class EntityDaoJdbcImpl implements EntityDao {
 
             List<Field> fields = new ArrayList<>();
 
-            List<FieldDefinition> defs = selectEntityPreparedStatement.getEntityDefinition().getDefinitions();
+            List<FieldDefinition> defs = abstractEntityPreparedStatement.getEntityDefinition().getDefinitions();
 
             int index = 2;
 
@@ -164,7 +178,7 @@ public class EntityDaoJdbcImpl implements EntityDao {
 
             Entity entity = new Entity();
             entity.setId(id);
-            entity.setDefinitionId(selectEntityPreparedStatement.getEntityDefinition().getId());
+            entity.setDefinitionId(abstractEntityPreparedStatement.getEntityDefinition().getId());
             entity.setFields(fields);
 
             return entity;

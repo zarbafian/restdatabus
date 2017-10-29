@@ -43,6 +43,26 @@ public class FieldDefinitionData implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FieldDefinitionData that = (FieldDefinitionData) o;
+
+        if (!name.equals(that.name)) return false;
+        if (!fieldType.equals(that.fieldType)) return false;
+        return targetEntity != null ? targetEntity.equals(that.targetEntity) : that.targetEntity == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + fieldType.hashCode();
+        result = 31 * result + (targetEntity != null ? targetEntity.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "FieldDefinitionData{" +
                 "name='" + name + '\'' +
