@@ -58,9 +58,7 @@ public class InternalEntityManagerImpl {
 
         Entity persistedEntity = entityService.create(entityDefinition, entity);
 
-        EntityData persistedData = entityObjectMapper.toDataObject(persistedEntity, entityDefinition);
-
-        return persistedData;
+        return entityObjectMapper.toDataObject(persistedEntity, entityDefinition);
     }
 
     public List<EntityData> findByType(String type) {
@@ -86,10 +84,61 @@ public class InternalEntityManagerImpl {
         return data;
     }
 
-    private void entityTypeNotExist(String type) {
+    private void entityNotExist(String type, Long id) {
 
-        String msg = "entity type '" + type + "' does not exist";
+        String msg = "entity of type '" + type + "' and id '" + id + "' does not exist";
         LOG.error(msg);
         throw new IllegalArgumentException(msg);
+    }
+
+    private void entityTypeNotExist(String type) {
+
+        String msg = "entity type '" + type + "' was not found";
+        LOG.error(msg);
+        throw new IllegalArgumentException(msg);
+    }
+
+    public EntityData findByTypeAndId(String type, Long id) {
+
+        LOG.debug("findByTypeAndId: {} ,{}", type, id);
+
+        EntityDefinition entityDefinition = entityDefinitionService.findByName(type);
+
+        // Check type
+        if(entityDefinition == null) {
+            entityTypeNotExist(type);
+        }
+
+        Entity entity = entityService.findByDefinitionAndId(entityDefinition, id);
+
+        if(entity == null) {
+            entityNotExist(entityDefinition.getName(), id);
+        }
+
+        return entityObjectMapper.toDataObject(entity, entityDefinition);
+
+
+    }
+
+    public boolean deleteByTypeAndId(String type, Long id) {
+
+        LOG.debug("deleteByTypeAndId: {} ,{}", type, id);
+
+        EntityDefinition entityDefinition = entityDefinitionService.findByName(type);
+
+        // Check type
+        if(entityDefinition == null) {
+            entityTypeNotExist(type);
+        }
+
+        Entity entity = entityService.findByDefinitionAndId(entityDefinition, id);
+
+        if(entity == null) {
+            entityNotExist(entityDefinition.getName(), id);
+        }
+
+        entityService.deleteByDefinitionAndId(entityDefinition, id);
+
+        return true;
     }
 }

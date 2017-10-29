@@ -42,7 +42,7 @@ public abstract class AbstractEntityPreparedStatement implements PreparedStateme
 
             FieldDefinition fd = entityDefinition.getDefinitions().get(i);
 
-            sb.append(FIELD_PREFIX + fd.getId());
+            sb.append(fieldName(fd.getId()));
 
             if (i < (entityDefinition.getDefinitions().size() - 1)) {
 

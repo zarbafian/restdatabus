@@ -46,18 +46,6 @@ public class EntityController {
     }
 
     @RequestMapping(
-            value = ENTITY_BY_ID,
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<Object> getById(@PathVariable(value = "id") Long id) {
-
-        LOG.debug("getByName - {}", id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @RequestMapping(
             value = ENTITIES,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -70,4 +58,34 @@ public class EntityController {
 
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
+
+    @RequestMapping(
+            value = ENTITY_BY_ID,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<EntityData> getByTypeAndId(@PathVariable(value = "id") Long id, @RequestParam(value = "type") String type) {
+
+        LOG.debug("getByTypeAndId - {}", type);
+
+        EntityData result = entityManager.findByTypeAndId(type, id);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
+
+    @RequestMapping(
+            value = ENTITY_BY_ID,
+            method = RequestMethod.DELETE
+    )
+    public ResponseEntity<Void> deleteById(@PathVariable(value = "id") Long id, @RequestParam(value = "type") String type) {
+
+        LOG.debug("deleteById: {}, id", type);
+
+        entityManager.deleteByTypeAndId(type, id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

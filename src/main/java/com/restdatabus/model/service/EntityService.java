@@ -13,4 +13,8 @@ public interface EntityService {
     Entity create(EntityDefinition entityDefinition, Entity entity);
 
     List<Entity> findByDefinition(EntityDefinition entityDefinition);
+
+    Entity findByDefinitionAndId(EntityDefinition entityDefinition, Long id);
+
+    void deleteByDefinitionAndId(EntityDefinition entityDefinition, Long id);
 }

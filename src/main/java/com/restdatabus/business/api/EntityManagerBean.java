@@ -64,4 +64,46 @@ public class EntityManagerBean implements EntityManager {
 
         return results;
     }
+
+    @Override
+    public EntityData findByTypeAndId(String type, Long id) {
+
+        LOG.debug("findByTypeAndId: {}", type);
+
+        // Check permissions
+        accessControlManager.hasPermission("/entities/" + type + "/" + id, Action.READ); // TODO
+
+        EntityData result = this.impl.findByTypeAndId(type, id);
+
+        // Notify event
+        eventNotificationManager.push(
+                "/entities/" + type + "/" + id, // TODO
+                Action.READ,
+                null,
+                result
+        );
+
+        return result;
+    }
+
+    @Override
+    public void deleteByTypeAndId(String type, Long id) {
+
+        LOG.debug("deleteByTypeAndId: {}, {}", type, id);
+
+        // Check permissions
+        accessControlManager.hasPermission("/entities/" + type + "/" + id, Action.DELETE); // TODO
+
+        boolean found = this.impl.deleteByTypeAndId(type, id);
+
+        if(found) {
+            // Notify event
+            eventNotificationManager.push(
+                    "/entities/" + type + "/" + id, // TODO
+                    Action.DELETE,
+                    null,
+                    null
+            );
+        }
+    }
 }

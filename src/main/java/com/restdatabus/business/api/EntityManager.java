@@ -9,4 +9,8 @@ public interface EntityManager {
     EntityData create(EntityData data);
 
     List<EntityData> findByType(String type);
+
+    EntityData findByTypeAndId(String type, Long id);
+
+    void deleteByTypeAndId(String type, Long id);
 }

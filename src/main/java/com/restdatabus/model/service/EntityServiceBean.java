@@ -35,4 +35,20 @@ public class EntityServiceBean implements EntityService {
 
         return entityDao.findByDefinition(entityDefinition);
     }
+
+    @Override
+    public Entity findByDefinitionAndId(EntityDefinition entityDefinition, Long id) {
+
+        LOG.debug("findByDefinitionAndId: {}, {}", entityDefinition, id);
+
+        return entityDao.findByDefinitionAndId(entityDefinition, id);
+    }
+
+    @Override
+    public void deleteByDefinitionAndId(EntityDefinition entityDefinition, Long id) {
+
+        LOG.debug("deleteByDefinitionAndId: {}, {}", entityDefinition, id);
+
+        entityDao.deleteByDefinitionAndId(entityDefinition, id);
+    }
 }

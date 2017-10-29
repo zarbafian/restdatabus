@@ -1,6 +1,7 @@
 package com.restdatabus.dao.jdbc;
 
 import com.restdatabus.dao.EntityDao;
+import com.restdatabus.dao.jdbc.sql.DeleteEntityPreparedStatement;
 import com.restdatabus.dao.jdbc.sql.InsertEntityPreparedStatement;
 import com.restdatabus.dao.jdbc.sql.SelectEntityPreparedStatement;
 import com.restdatabus.model.data.Entity;
@@ -68,18 +69,47 @@ public class EntityDaoJdbcImpl implements EntityDao {
 
         LOG.debug("> findByDefinition: {}", entityDefinition);
 
-        String tableName = tableName(entityDefinition.getId());
-
         SelectEntityPreparedStatement selectEntityPreparedStatement = new SelectEntityPreparedStatement(entityDefinition);
 
         List<Entity> results = jdbcTemplate.query(
-                selectEntityPreparedStatement.buildSqlTemplate(),
+                selectEntityPreparedStatement,
                 new EntityRowMapper(fieldTypeService, selectEntityPreparedStatement)
         );
 
         LOG.debug("= findByDefinition: found {} result(s)", results.size());
 
         return results;
+    }
+
+    @Override
+    public Entity findByDefinitionAndId(EntityDefinition entityDefinition, Long id) {
+
+        LOG.debug("> findByDefinitionAndId: {}, {}", entityDefinition, id);
+
+        SelectEntityPreparedStatement selectEntityPreparedStatement = new SelectEntityPreparedStatement(entityDefinition, id);
+
+        List<Entity> results = jdbcTemplate.query(
+                selectEntityPreparedStatement,
+                new EntityRowMapper(fieldTypeService, selectEntityPreparedStatement)
+        );
+
+        LOG.debug("= findByDefinitionAndId: found {} result(s)", results.size());
+
+        if(results.isEmpty()) {
+            return null;
+        }
+
+        return results.get(0);
+    }
+
+    @Override
+    public void deleteByDefinitionAndId(EntityDefinition entityDefinition, Long id) {
+
+        LOG.debug("> deleteByDefinitionAndId: {}, {}", entityDefinition, id);
+
+        jdbcTemplate.update(
+          new DeleteEntityPreparedStatement(entityDefinition, id)
+        );
     }
 
     private static class EntityRowMapper implements RowMapper<Entity> {
