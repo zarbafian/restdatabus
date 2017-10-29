@@ -116,7 +116,7 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
     @Override
     public FieldDefinitionData updateField(String name, String field, FieldDefinitionData newData) {
 
-        LOG.debug("createField: {} -> {}", name, newData);
+        LOG.debug("updateField: {}.{} -> {}", name, field, newData);
 
         // Check permissions
         accessControlManager.hasPermission(

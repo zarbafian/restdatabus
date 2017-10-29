@@ -17,4 +17,5 @@ public interface FieldDefinitionService {
 
     FieldDefinition findByDefinitionAndName(Long entityDefinitionId, String name1);
 
+    FieldDefinition findById(Long id);
 }

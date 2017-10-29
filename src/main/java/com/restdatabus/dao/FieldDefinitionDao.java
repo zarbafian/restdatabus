@@ -18,4 +18,6 @@ public interface FieldDefinitionDao {
     FieldDefinition update(FieldDefinition fieldDefinition);
 
     FieldDefinition findByDefinitionAndName(Long entityName, String fieldName);
+
+    FieldDefinition findById(Long id);
 }

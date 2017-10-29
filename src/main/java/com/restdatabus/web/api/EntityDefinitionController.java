@@ -60,7 +60,7 @@ public class EntityDefinitionController {
     )
     public ResponseEntity<FieldDefinitionData> updateFieldDefinition(@PathVariable(value = "name") String name, @PathVariable(value = "field") String field, @RequestBody FieldDefinitionData data) {
 
-        LOG.debug("updateFieldDefinition: {} -> ", name, field);
+        LOG.debug("updateFieldDefinition: {}.{} -> {}", name, field, data);
 
         FieldDefinitionData updatedField = manager.updateField(name, field, data);
 

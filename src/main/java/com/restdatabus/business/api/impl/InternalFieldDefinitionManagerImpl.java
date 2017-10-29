@@ -118,7 +118,7 @@ public class InternalFieldDefinitionManagerImpl {
         LOG.debug("> update: {}", newFieldDefinition);
 
         // Check if change to or from entity type, or a change in target entity
-        FieldDefinition existingField = fieldDefinitionService.findByDefinitionAndName(newFieldDefinition.getEntityDefinitionId(), newFieldDefinition.getName());
+        FieldDefinition existingField = fieldDefinitionService.findById(newFieldDefinition.getId());
 
         LOG.debug("> update (existing data): {}", existingField);
 

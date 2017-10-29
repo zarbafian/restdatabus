@@ -56,4 +56,12 @@ public class FieldDefinitionServiceBean implements FieldDefinitionService {
 
         return definitionDao.findByDefinitionAndName(entityDefinitionId, fieldName);
     }
+
+    @Override
+    public FieldDefinition findById(Long id) {
+
+        LOG.debug("findById: {}", id);
+
+        return definitionDao.findById(id);
+    }
 }

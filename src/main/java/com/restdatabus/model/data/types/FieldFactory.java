@@ -21,6 +21,16 @@ public class FieldFactory {
                 return new TextField();
             case ENTITY:
                 return new EntityField();
+            case PARAGRAPH:
+                return new ParagraphField();
+            case DATE:
+                return new DateField();
+            case DATETIME:
+                return new DateTimeField();
+            case DECIMAL:
+                return new DecimalField();
+            case FILE:
+                return new FileField();
             default:
                 throw new UnsupportedOperationException("data type '" + dataType + "' not implemented");
         }

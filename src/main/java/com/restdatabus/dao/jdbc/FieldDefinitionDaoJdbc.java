@@ -140,6 +140,30 @@ public class FieldDefinitionDaoJdbc implements FieldDefinitionDao {
         return results.get(0);
     }
 
+    @Override
+    public FieldDefinition findById(Long id) {
+
+        LOG.debug("> findById: {}", id);
+
+        List<FieldDefinition> results = jdbcTemplate.query(
+
+                "SELECT fd.id, fd.name, fd.field_type_id, fd.entity_definition_id, rd.entity_definition_id " +
+                        "FROM field_definition fd " +
+                        "LEFT JOIN relation_definition rd ON fd.id=rd.field_definition_id " +
+                        "WHERE fd.id=?",
+                new Object[]{ id },
+                new FieldDefinitionRowMapper()
+        );
+
+        LOG.debug("< findById: found {} field definitions(s)", results.size());
+
+        if(results.isEmpty()) {
+            return null;
+        }
+
+        return results.get(0);
+    }
+
     protected static class FieldDefinitionRowMapper implements RowMapper<FieldDefinition> {
 
         @Override
