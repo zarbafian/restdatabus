@@ -1,7 +1,9 @@
 package com.restdatabus.model.meta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A persistent model of a business entity type.
@@ -30,6 +32,40 @@ public class EntityDefinition {
     public EntityDefinition(String name) {
         this.definitions = new ArrayList<>();
         this.name = name;
+    }
+
+    public int getParameterIndex(Long fieldDefinitionId) {
+
+        for (int i=0; i < this.getDefinitions().size(); i++) {
+
+            if(this.getDefinitions().get(i).getId().equals(fieldDefinitionId)) {
+                return (i + 1);
+            }
+        }
+
+        throw new IllegalStateException("field definition with id '" + fieldDefinitionId + "' not found, were present: " + getDefinitions());
+    }
+
+    public FieldDefinition findFieldById(Long fieldId) {
+
+        for(FieldDefinition fieldDefinition: this.getDefinitions()) {
+            if(fieldDefinition.getId().equals(fieldId)) {
+                return fieldDefinition;
+            }
+        }
+
+        return null;
+    }
+
+    public FieldDefinition findFieldByName(String name) {
+
+        for(FieldDefinition fieldDefinition: this.getDefinitions()) {
+            if(fieldDefinition.getName().equals(name)) {
+                return fieldDefinition;
+            }
+        }
+
+        return null;
     }
 
     @Override

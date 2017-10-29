@@ -1,5 +1,7 @@
 package com.restdatabus.dao.jdbc;
 
+import static com.restdatabus.dao.jdbc.sql.SqlConstants.*;
+
 import com.restdatabus.dao.EntityTableDao;
 import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
@@ -13,14 +15,6 @@ import org.springframework.stereotype.Service;
 public class EntityTableDaoJdbcImpl implements EntityTableDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityTableDaoJdbcImpl.class);
-
-    private static final String OWNER = "restdatabus";
-
-    private static final String TABLE_PREFIX = "entity_";
-    private static final String FIELD_PREFIX = "field_";
-    private static final String ID_FIELD = "id";
-    private static final String FK_PREFIX = "fk_";
-    private static final String FK_IDX_PREFIX = "fki_";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -172,23 +166,5 @@ public class EntityTableDaoJdbcImpl implements EntityTableDao {
                 "DROP INDEX " + indexName;
 
         jdbcTemplate.execute(sqlIdx);
-    }
-
-    private String fieldName(Long fieldDefinitionId) {
-        return FIELD_PREFIX + fieldDefinitionId;
-    }
-
-    private String tableName(Long entityDefinitionId) {
-        return TABLE_PREFIX + entityDefinitionId;
-    }
-
-    private String foreignKeyName(String tableName, String fieldName, String targetTable) {
-        return FK_PREFIX + relationName(tableName, fieldName, targetTable);
-    }
-    private String foreignKeyIndexName(String tableName, String fieldName, String targetTable) {
-        return FK_IDX_PREFIX + relationName(tableName, fieldName, targetTable);
-    }
-    private String relationName(String tableName, String fieldName, String targetTable) {
-        return tableName + "_" + fieldName + "_" + targetTable;
     }
 }

@@ -52,9 +52,7 @@ public class InternalFieldDefinitionManagerImpl {
         // Create relation if applicable
         if(fieldType.getKey().equals(Constants.FIELD_TYPE_ENTITY)) {
 
-            LOG.debug("____________________________________________________________________");
             LOG.debug("Adding entity field for entity: {}", fieldDefinition.getTargetEntityId() );
-            LOG.debug("____________________________________________________________________");
 
             addEntityField(persistedField);
         }
@@ -78,14 +76,11 @@ public class InternalFieldDefinitionManagerImpl {
 
         LOG.debug("> delete: {}", fieldDefinition);
 
-        // TODO
         // Remove relation if applicable
         FieldType fieldType = fieldTypeService.findById(fieldDefinition.getFieldTypeId());
         if(fieldType.getKey().equals(Constants.FIELD_TYPE_ENTITY)) {
 
-            LOG.debug("____________________________________________________________________");
             LOG.debug("Deleted entity field for entity: {}", fieldDefinition.getTargetEntityId() );
-            LOG.debug("____________________________________________________________________");
 
             removeEntityField(fieldDefinition);
         }
@@ -140,9 +135,7 @@ public class InternalFieldDefinitionManagerImpl {
             if (Constants.FIELD_TYPE_ENTITY.equals(newFieldType.getKey())) {
 
                 // Yes
-                LOG.debug("____________________________________________________________________");
                 LOG.debug("Updated to entity field for entity: {}", newFieldDefinition.getTargetEntityId());
-                LOG.debug("____________________________________________________________________");
 
                 // Add specific stuff
                 addEntityField(newFieldDefinition);
@@ -152,9 +145,7 @@ public class InternalFieldDefinitionManagerImpl {
             else if(Constants.FIELD_TYPE_ENTITY.equals(oldFieldType.getKey())) {
 
                 // Yes
-                LOG.debug("____________________________________________________________________");
                 LOG.debug("Updated to basic field from entity: {}", existingField.getTargetEntityId());
-                LOG.debug("____________________________________________________________________");
 
                 // Remove specific stuff
                 removeEntityField(existingField);
@@ -163,11 +154,8 @@ public class InternalFieldDefinitionManagerImpl {
             // 1.3 - Change from basic to basic
             else {
 
-                LOG.debug("____________________________________________________________________");
-                LOG.debug("Updated from basic to basic");
-                LOG.debug("____________________________________________________________________");
-
                 // Nothing specific to do
+                LOG.debug("Updated from basic to basic");
             }
 
             // Change column
@@ -184,9 +172,7 @@ public class InternalFieldDefinitionManagerImpl {
         ) {
             // 2 - Change in target entity type
 
-            LOG.debug("____________________________________________________________________");
             LOG.debug("Updated from entity to entity: {} -> {}", existingField.getTargetEntityId(), newFieldDefinition.getTargetEntityId());
-            LOG.debug("____________________________________________________________________");
 
             removeEntityField(existingField);
             addEntityField(newFieldDefinition);

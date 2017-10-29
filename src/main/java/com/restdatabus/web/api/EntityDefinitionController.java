@@ -3,7 +3,6 @@ package com.restdatabus.web.api;
 import static com.restdatabus.web.api.Constants.*;
 
 import com.restdatabus.business.api.EntityDefinitionManager;
-import com.restdatabus.model.data.DataType;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
 import com.restdatabus.model.data.dvo.FieldTypeData;
@@ -15,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

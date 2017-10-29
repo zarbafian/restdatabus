@@ -9,9 +9,7 @@ import com.restdatabus.model.data.transform.EntityDefinitionObjectMapper;
 import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
 import com.restdatabus.model.meta.FieldType;
-import com.restdatabus.model.meta.RelationDefinition;
 import com.restdatabus.model.service.*;
-import com.restdatabus.web.api.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +61,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("create: {}", data);
 
-        checkEntityName(LOG, data);
+        checkEntityName(data);
 
         // Check if the name is not already exist
         EntityDefinition entityDefinition = entityDefinitionService.findByName(data.getName());
@@ -138,7 +136,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("update: {} -> {}", existingData.getName(), newData);
 
-        checkEntityName(LOG, newData);
+        checkEntityName(newData);
 
         // Has the name changed
         if(! existingData.getName().equals(newData.getName()) ) {
@@ -176,7 +174,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("> createField: {} -> {}", name, data);
 
-        checkFieldName(LOG, data);
+        checkFieldName(data);
 
         EntityDefinition entityDefinition = entityDefinitionService.findByName(name);
 
@@ -215,7 +213,7 @@ public class InternalEntityDefinitionManagerImpl {
 
         LOG.debug("> updateField: {}.{} -> {}", name, field, data);
 
-        checkFieldName(LOG, data);
+        checkFieldName(data);
 
         // Check that entity exit
         EntityDefinition entityDefinition = entityDefinitionService.findByName(name);

@@ -13,9 +13,10 @@ public enum DataType {
     PARAGRAPH("paragraph"),
     INTEGER("integer"),
     DECIMAL("decimal"),
-    LIST("list"),
+    FILE("file"),
     ENTITY("entity"),
-    FILE("file");
+    DATE("date"),
+    DATETIME("datetime");
 
     private String key;
 
@@ -34,20 +35,22 @@ public enum DataType {
              */
             case "yesno":
                 return YESNO;
+            case "text":
+                return TEXT;
             case "paragraph":
                 return PARAGRAPH;
             case "integer":
                 return INTEGER;
             case "decimal":
                 return DECIMAL;
-            case "list":
-                return LIST;
-            case "entity":
-                return ENTITY;
-            case "text":
-                return TEXT;
             case "file":
                 return FILE;
+            case "entity":
+                return ENTITY;
+            case "date":
+                return DATE;
+            case "datetime":
+                return DATETIME;
 
                 default: throw new IllegalArgumentException("unknown data type '" + key + "'");
         }

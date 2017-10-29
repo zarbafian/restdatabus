@@ -1,59 +1,44 @@
 package com.restdatabus.model.data;
 
-import com.restdatabus.model.meta.EntityDefinition;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * A business entity.
- */
 public class Entity {
 
     /**
-     * The type of this entity.
+     * Identifier of the entity's definition
      */
-    private EntityDefinition entityDefinition;
+    private Long definitionId;
 
     /**
-     * The unique identifier of this entity type.
+     * Identifier of the entity
      */
     private Long id;
 
     /**
-     * The list of data fields associated with this type of entity.
+     * Fields of the entity
      */
-    private Map<String, Field> fields;
+    private List<Field> fields;
 
-    /**
-     * Default constructor.
-     */
     public Entity() {
-
-        this.fields = new HashMap<>();
+        this.fields = new ArrayList<>();
     }
 
     @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Entity entity = (Entity) o;
-
-        if (!entityDefinition.getId().equals(entity.entityDefinition.getId())) return false;
-        return id.equals(entity.id);
+    public String toString() {
+        return "Entity{" +
+                "definitionId=" + definitionId +
+                ", id=" + id +
+                ", fields=" + fields +
+                '}';
     }
 
-    @Override
-    public int hashCode() {
-        int result = entityDefinition.hashCode();
-        result = 31 * result + id.hashCode();
-        return result;
+    public Long getDefinitionId() {
+        return definitionId;
     }
 
-    public Map<String, Field> getFields() {
-        return fields;
+    public void setDefinitionId(Long definitionId) {
+        this.definitionId = definitionId;
     }
 
     public Long getId() {
@@ -62,5 +47,13 @@ public class Entity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
     }
 }

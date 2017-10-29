@@ -1,34 +1,53 @@
 package com.restdatabus.model.data;
 
-/**
- * Base class for entity fields.
- * @param <T> the type of the data contained
- */
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public abstract class Field<T> {
 
-    /**
-     * The value of the field.
-     */
+    protected Long id;
+
+    protected DataType dataType;
+
     protected T value;
 
-    /**
-     * Default constructor.
-     */
-    public Field() {
-    }
+    public abstract void setQueryParameter(PreparedStatement preparedStatement, int index) throws SQLException;
 
-    /**
-     * Initializing constructor.
-     * @param value the value of the field.
-     */
-    public Field(T value) {
-        this.value = value;
-    }
+    public abstract T readQueryResult(ResultSet rs, int index) throws SQLException;
 
     @Override
     public String toString() {
         return "Field{" +
-                "value=" + value +
+                "id=" + id +
+                ", dataType=" + dataType +
+                ", value=" + value +
                 '}';
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public DataType getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(DataType dataType) {
+        this.dataType = dataType;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public abstract Field emptyClone();
 }

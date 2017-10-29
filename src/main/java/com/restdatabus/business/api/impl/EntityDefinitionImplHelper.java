@@ -3,10 +3,18 @@ package com.restdatabus.business.api.impl;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EntityDefinitionImplHelper {
 
-    protected static void checkEntityName(Logger LOG, EntityDefinitionData data) {
+    private static final Logger LOG = LoggerFactory.getLogger(EntityDefinitionImplHelper.class);
+
+    /**
+     * Verify that entity definition name is not empty
+     * @param data
+     */
+    protected static void checkEntityName(EntityDefinitionData data) {
+
         if(data.getName() == null || data.getName().isEmpty()) {
             String msg = entityNameCannotBeEmpty();
             LOG.error(msg);
@@ -14,7 +22,12 @@ public class EntityDefinitionImplHelper {
         }
     }
 
-    protected static void checkFieldName(Logger LOG, FieldDefinitionData data) {
+    /**
+     * Verify that field definition name is not empty
+     * @param data
+     */
+    protected static void checkFieldName(FieldDefinitionData data) {
+
         if(data.getName() == null || data.getName().isEmpty()) {
             String msg = fieldNameCannotBeEmpty();
             LOG.error(msg);

@@ -1,22 +1,38 @@
 package com.restdatabus.model.service;
 
+import com.restdatabus.dao.EntityDao;
 import com.restdatabus.model.data.Entity;
+import com.restdatabus.model.meta.EntityDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Handle persistence service for entities.
  */
-public class EntityServiceBean {
+@Service
+public class EntityServiceBean implements EntityService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EntityServiceBean.class);
 
-    public Entity create(Entity entity) {
+    @Autowired
+    private EntityDao entityDao;
 
-        LOG.debug("create: {}", entity);
+    public Entity create(EntityDefinition entityDefinition, Entity entity) {
 
-        entity.setId(System.currentTimeMillis());
+        LOG.debug("create: {} -> {}", entityDefinition, entity);
 
-        return entity;
+        return entityDao.insert(entityDefinition, entity);
+    }
+
+    @Override
+    public List<Entity> findByDefinition(EntityDefinition entityDefinition) {
+
+        LOG.debug("findByDefinition: {}", entityDefinition);
+
+        return entityDao.findByDefinition(entityDefinition);
     }
 }
