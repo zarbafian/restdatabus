@@ -32,7 +32,7 @@ public abstract class AbstractEntityPreparedStatement implements PreparedStateme
         StringBuilder sb = new StringBuilder(
                 includeId ?
                         (ID_FIELD + (
-                                entityDefinition.getDefinitions().size() > 1 ?
+                                entityDefinition.getDefinitions().size() > 0 ?
                                         ", " :
                                         "")) :
                         ""
@@ -59,7 +59,7 @@ public abstract class AbstractEntityPreparedStatement implements PreparedStateme
 
         StringBuilder sb = new StringBuilder(
                 includeId ?
-                        ("?" + (entityDefinition.getDefinitions().size() > 1 ?
+                        ("?" + (entityDefinition.getDefinitions().size() > 0 ?
                                 ", " :
                                 "")) :
                         ""
