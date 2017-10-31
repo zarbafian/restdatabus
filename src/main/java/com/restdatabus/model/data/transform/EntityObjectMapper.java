@@ -1,5 +1,6 @@
 package com.restdatabus.model.data.transform;
 
+import com.restdatabus.common.DateFormat;
 import com.restdatabus.model.data.DataType;
 import com.restdatabus.model.data.Entity;
 import com.restdatabus.model.data.Field;
@@ -44,14 +45,7 @@ public class EntityObjectMapper {
 
             field.setId(fieldDefinition.getId());
 
-            if(DataType.ENTITY.equals(field.getDataType())) {
-                if(value instanceof Integer) {
-                    field.setValue(((Integer)value).longValue());
-                }
-            }
-            else {
-                field.setValue(value);
-            }
+            FieldFormat.setValue(field, value);
 
             fields.add(field);
         });
