@@ -27,6 +27,16 @@ public class FieldFormat {
                 throw new IllegalArgumentException("string expected for date field: " + field.toString());
             }
         }
+        else if(DataType.DATETIME.equals(field.getDataType())) {
+
+            // Cast string to date
+            if(value instanceof String) {
+                field.setValue(DateFormat.parseDatetime((String) value));
+            }
+            else {
+                throw new IllegalArgumentException("string expected for datetime field: " + field.toString());
+            }
+        }
         else if(DataType.DECIMAL.equals(field.getDataType())) {
 
             if(value instanceof Number) {
