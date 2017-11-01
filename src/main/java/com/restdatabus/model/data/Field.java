@@ -12,6 +12,13 @@ public abstract class Field<T> {
 
     protected T value;
 
+    public Field() {
+    }
+
+    public Field(T value) {
+        this.value = value;
+    }
+
     public abstract void setQueryParameter(PreparedStatement preparedStatement, int index) throws SQLException;
 
     public abstract T readQueryResult(ResultSet rs, int index) throws SQLException;

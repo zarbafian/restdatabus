@@ -28,12 +28,21 @@ public class InsertEntityPreparedStatement extends AbstractEntityPreparedStateme
 
         boolean includeId = false;
 
-        StringBuilder part1 = new StringBuilder("INSERT INTO " + tableName(getEntityDefinition().getId()));
-        part1.append("(");
-        part1.append(getFieldsList(includeId));
-        part1.append(") VALUES(");
-        part1.append(getParametersPlaceHolder(includeId));
-        part1.append(")");
+        StringBuilder part1 = new StringBuilder();
+
+        if(entity.getFields().isEmpty()) {
+
+            part1.append("INSERT INTO " + tableName(getEntityDefinition().getId()) + " DEFAULT VALUES");
+        }
+        else {
+            // TODO: insert based on provided values instead od definition
+            part1.append("INSERT INTO " + tableName(getEntityDefinition().getId()));
+            part1.append("(");
+            part1.append(getFieldsList(includeId));
+            part1.append(") VALUES(");
+            part1.append(getParametersPlaceHolder(includeId));
+            part1.append(")");
+        }
 
         String sql = part1.toString();
 

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class IntegerField extends Field<Integer> {
 
     public IntegerField() {
-        super();
+        super(0);
         this.setDataType(DataType.INTEGER);
     }
 

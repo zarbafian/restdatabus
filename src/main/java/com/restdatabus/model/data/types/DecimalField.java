@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class DecimalField extends Field<Double> {
 
     public DecimalField() {
-        super();
+        super(0.);
         this.setDataType(DataType.DECIMAL);
     }
 
