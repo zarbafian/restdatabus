@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class YesNoField extends Field<Boolean> {
 
     public YesNoField() {
-        super(false);
+        super();
         this.setDataType(DataType.YESNO);
     }
 

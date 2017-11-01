@@ -27,6 +27,12 @@ public class FieldFormat {
                 throw new IllegalArgumentException("string expected for date field: " + field.toString());
             }
         }
+        else if(DataType.DECIMAL.equals(field.getDataType())) {
+
+            if(value instanceof Number) {
+                field.setValue(((Number) value).doubleValue());
+            }
+        }
         else {
             field.setValue(value);
         }

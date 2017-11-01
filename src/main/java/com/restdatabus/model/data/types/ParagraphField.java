@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class ParagraphField extends Field<String> {
 
     public ParagraphField() {
-        super("");
+        super();
         this.setDataType(DataType.PARAGRAPH);
     }
 

@@ -1,5 +1,7 @@
 package com.restdatabus.model.data;
 
+import com.restdatabus.model.meta.FieldDefinition;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,5 +57,15 @@ public class Entity {
 
     public void setFields(List<Field> fields) {
         this.fields = fields;
+    }
+
+    public Field getField(FieldDefinition fieldDefinition) {
+
+        for(Field f: fields) {
+            if ((f.getId().equals(fieldDefinition.getId()))) {
+                return f;
+            }
+        }
+        return null;
     }
 }

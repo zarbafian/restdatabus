@@ -10,12 +10,13 @@ import java.sql.SQLException;
 public class DecimalField extends Field<Double> {
 
     public DecimalField() {
-        super(0.);
+        super();
         this.setDataType(DataType.DECIMAL);
     }
 
     @Override
     public void setQueryParameter(PreparedStatement preparedStatement, int index) throws SQLException {
+
         preparedStatement.setDouble(index, this.getValue());
     }
 

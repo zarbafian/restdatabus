@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class DateField extends Field<Date> {
 
     public DateField() {
-        super(null);
+        super();
         this.setDataType(DataType.DATE);
     }
 

@@ -66,11 +66,15 @@ public class EntityObjectMapper {
 
         Map<String, Object> fields = new HashMap<>();
 
-        entity.getFields().forEach( field -> {
+        definition.getDefinitions().forEach(fieldDefinition -> {
 
-            FieldDefinition fieldDefinition = definition.findFieldById(field.getId());
-
-            fields.put(fieldDefinition.getName(), field.getValue());
+            Field field = entity.getField(fieldDefinition);
+            if(field != null) {
+                fields.put(fieldDefinition.getName(), field.getValue());
+            }
+            else {
+                fields.put(fieldDefinition.getName(), null);
+            }
         });
 
         EntityData data = new EntityData();

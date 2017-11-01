@@ -35,12 +35,11 @@ public class InsertEntityPreparedStatement extends AbstractEntityPreparedStateme
             part1.append("INSERT INTO " + tableName(getEntityDefinition().getId()) + " DEFAULT VALUES");
         }
         else {
-            // TODO: insert based on provided values instead od definition
             part1.append("INSERT INTO " + tableName(getEntityDefinition().getId()));
             part1.append("(");
-            part1.append(getFieldsList(includeId));
+            part1.append(buildInsertFields(entity));
             part1.append(") VALUES(");
-            part1.append(getParametersPlaceHolder(includeId));
+            part1.append(buildValuesPart(entity));
             part1.append(")");
         }
 
@@ -49,6 +48,40 @@ public class InsertEntityPreparedStatement extends AbstractEntityPreparedStateme
         LOG.debug("< buildSqlTemplate: {}", sql);
 
         return sql;
+    }
+
+    private String buildInsertFields(Entity entity) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i=0; i<entity.getFields().size(); i++) {
+
+            sb.append(fieldName(entity.getFields().get(i).getId()));
+
+            if (i < (entity.getFields().size() - 1)) {
+
+                sb.append(", ");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private String buildValuesPart(Entity entity) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i=0; i<entity.getFields().size(); i++) {
+
+            sb.append("?");
+
+            if (i < (entity.getFields().size() - 1)) {
+
+                sb.append(", ");
+            }
+        }
+
+        return sb.toString();
     }
 
     @Override

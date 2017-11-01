@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class TextField extends Field<String> {
 
     public TextField() {
-        super("");
+        super();
         this.setDataType(DataType.TEXT);
     }
 
