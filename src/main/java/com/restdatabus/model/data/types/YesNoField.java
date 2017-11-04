@@ -16,7 +16,12 @@ public class YesNoField extends Field<Boolean> {
 
     @Override
     public void setQueryParameter(PreparedStatement preparedStatement, int index) throws SQLException {
-        preparedStatement.setBoolean(index, this.getValue());
+        if(this.getValue() == null){
+            preparedStatement.setBoolean(index, false);
+        }
+        else {
+            preparedStatement.setBoolean(index, this.getValue());
+        }
     }
 
     @Override
