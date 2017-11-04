@@ -159,4 +159,25 @@ public class EntityDefinitionController {
 
         return new ResponseEntity<>(persistedData, HttpStatus.OK);
     }
+
+    /**
+     * Retrieve the type of relation of an entity field
+     * @return
+     */
+    @RequestMapping(
+            value = FIELD_BY_NAME_AND_FIELD,
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<FieldDefinitionData> getFieldRelationType(
+            @PathVariable(value = "name") String type,
+            @PathVariable(value = "field") String field
+            ) {
+
+        LOG.debug("getFieldRelationType: {} -> {}", type, field);
+
+        FieldDefinitionData data = manager.getField(type, field);
+
+        return new ResponseEntity<FieldDefinitionData>(data, HttpStatus.OK);
+    }
 }

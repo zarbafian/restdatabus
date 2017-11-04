@@ -90,6 +90,30 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
     }
 
     @Override
+    public FieldDefinitionData getField(String name, String field) {
+
+        LOG.debug("getField: {} -> {}", name, field);
+
+        // Check permissions
+        accessControlManager.hasPermission(
+                "/definitions", // TODO: + "/" + name/fields
+                Action.READ
+        );
+
+        FieldDefinitionData fieldDefinitionData = this.impl.findByNameAndDefinition(name, field);
+
+        // Notify event
+        eventNotificationManager.push(
+                "/definitions", // TODO: + "/" + name/fields
+                Action.READ,
+                null,
+                fieldDefinitionData // TODO: + name?
+        );
+
+        return fieldDefinitionData;
+    }
+
+    @Override
     public FieldDefinitionData createField(String name, FieldDefinitionData data) {
 
         LOG.debug("createField: {} -> {}", name, data);

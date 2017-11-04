@@ -18,6 +18,8 @@ public interface EntityDefinitionManager {
 
     EntityDefinitionData update(String name, EntityDefinitionData data);
 
+    FieldDefinitionData getField(String name, String field);
+
     FieldDefinitionData createField(String name, FieldDefinitionData data);
 
     void deleteField(String name, String field);

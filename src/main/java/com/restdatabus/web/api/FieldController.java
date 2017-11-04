@@ -11,15 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileOutputStream;
-import java.util.Map;
-
 import static com.restdatabus.web.api.Constants.FILED_BY_ENTITY_AND_ID;
 
 @RestController
 public class FieldController {
 
     private static final Logger LOG = LoggerFactory.getLogger(FieldController.class);
+
 
     @RequestMapping(
             value = FILED_BY_ENTITY_AND_ID,
