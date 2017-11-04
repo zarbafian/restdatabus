@@ -32,7 +32,7 @@ INSERT INTO field_type (key, sql_type) VALUES ('text', 'character varying');
 INSERT INTO field_type (key, sql_type) VALUES ('paragraph', 'text');
 INSERT INTO field_type (key, sql_type) VALUES ('integer', 'integer');
 INSERT INTO field_type (key, sql_type) VALUES ('decimal', 'double precision');
-INSERT INTO field_type (key, sql_type) VALUES ('file', 'bytea');
+--INSERT INTO field_type (key, sql_type) VALUES ('file', 'bytea');
 INSERT INTO field_type (key, sql_type) VALUES ('entity', 'bigint');
 INSERT INTO field_type (key, sql_type) VALUES ('date', 'date');
 INSERT INTO field_type (key, sql_type) VALUES ('datetime', 'timestamp with time zone');
