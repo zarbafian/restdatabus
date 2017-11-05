@@ -61,13 +61,16 @@ public class InternalReportManagerImpl {
 
         ReportResultsData data = new ReportResultsData();
 
+        // Add id column title
         data.getColumns().add(new ColumnData(Constants.ID, Constants.ID));
 
+        // Add other column titles
         for (FieldDefinition fd: entityDefinition.getDefinitions()) {
 
             data.getColumns().add(new ColumnData(fd.getName(), fd.getName()));
         }
 
+        // Add entities/data
         for (Entity e: entities) {
             Map<String, Object> row = new HashMap<>();
             row.put(Constants.ID, e.getId());
