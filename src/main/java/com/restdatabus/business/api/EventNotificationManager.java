@@ -1,8 +1,10 @@
 package com.restdatabus.business.api;
 
-import com.restdatabus.authorization.Action;
+import com.restdatabus.events.EventLogType;
+
+import java.time.OffsetDateTime;
 
 public interface EventNotificationManager {
 
-    void push(String path, Action actionType, Object before, Object after);
+    void log(EventLogType logType, OffsetDateTime timestamp, String[] target, Object[] params);
 }

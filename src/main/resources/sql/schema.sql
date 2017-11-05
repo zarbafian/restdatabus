@@ -169,3 +169,20 @@ WITH (
 );
 ALTER TABLE field_definition
   OWNER TO restdatabus;
+
+-- event_logs;
+CREATE TABLE event_logs
+(
+  id bigserial NOT NULL,
+  timestamp timestamp without time zone,
+  action character varying,
+  target character varying,
+  params character varying,
+--  event json,
+  CONSTRAINT pk_event_log PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE event_logs
+  OWNER TO restdatabus;

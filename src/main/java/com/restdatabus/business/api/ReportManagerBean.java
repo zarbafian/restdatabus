@@ -1,9 +1,13 @@
 package com.restdatabus.business.api;
 
+import static com.restdatabus.events.EventLogTarget.*;
+
 import com.restdatabus.authorization.Action;
 import com.restdatabus.business.api.impl.InternalReportManagerImpl;
+import com.restdatabus.events.EventLogType;
 import com.restdatabus.model.data.dvo.ReportData;
 import com.restdatabus.model.data.dvo.ReportResultsData;
+import com.restdatabus.model.service.TimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,9 @@ public class ReportManagerBean implements ReportManager {
     @Autowired
     private EventNotificationManager eventNotificationManager;
 
+    @Autowired
+    private TimeService timeService;
+
     @Override
     public List<ReportData> getEntityReports() {
 
@@ -36,11 +43,11 @@ public class ReportManagerBean implements ReportManager {
         List<ReportData> results = this.impl.getEntityReports();
 
         // Notify event
-        eventNotificationManager.push(
-                "/reports", // TODO
-                Action.READ,
-                null,
-                results
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { REPORTS, ENTITIES },
+                new Object[] {}
         );
 
         return results;
@@ -57,11 +64,11 @@ public class ReportManagerBean implements ReportManager {
         ReportResultsData results = this.impl.getEntityReport(type);
 
         // Notify event
-        eventNotificationManager.push(
-                "/reports/" + type, // TODO
-                Action.READ,
-                null,
-                results
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { REPORTS, ENTITIES, type },
+                new Object[] {}
         );
 
         return results;

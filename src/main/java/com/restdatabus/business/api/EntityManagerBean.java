@@ -1,8 +1,12 @@
 package com.restdatabus.business.api;
 
+import static com.restdatabus.events.EventLogTarget.*;
+
 import com.restdatabus.authorization.Action;
 import com.restdatabus.business.api.impl.InternalEntityManagerImpl;
+import com.restdatabus.events.EventLogType;
 import com.restdatabus.model.data.dvo.EntityData;
+import com.restdatabus.model.service.TimeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,9 @@ public class EntityManagerBean implements EntityManager {
     private AccessControlManager accessControlManager;
 
     @Autowired
+    private TimeService timeService;
+
+    @Autowired
     private EventNotificationManager eventNotificationManager;
 
     public EntityData create(EntityData data) {
@@ -34,11 +41,11 @@ public class EntityManagerBean implements EntityManager {
         EntityData persistedData = this.impl.create(data);
 
         // Notify event
-        eventNotificationManager.push(
-                "/entities/" + data.getType(), // TODO
-                Action.CREATE,
-                null,
-                persistedData
+        eventNotificationManager.log(
+                EventLogType.CREATE,
+                timeService.now(),
+                new String [] { ENTITIES, data.getType() },
+                new Object[] { data, persistedData }
         );
 
         return persistedData;
@@ -55,11 +62,11 @@ public class EntityManagerBean implements EntityManager {
         List<EntityData> results = this.impl.findByType(type);
 
         // Notify event
-        eventNotificationManager.push(
-                "/entities/" + type, // TODO
-                Action.READ,
-                null,
-                results
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { ENTITIES, type },
+                new Object[] {}
         );
 
         return results;
@@ -76,11 +83,11 @@ public class EntityManagerBean implements EntityManager {
         EntityData result = this.impl.findByTypeAndId(type, id);
 
         // Notify event
-        eventNotificationManager.push(
-                "/entities/" + type + "/" + id, // TODO
-                Action.READ,
-                null,
-                result
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { ENTITIES, type, String.valueOf(id) },
+                new Object[] {}
         );
 
         return result;
@@ -98,11 +105,11 @@ public class EntityManagerBean implements EntityManager {
 
         if(found) {
             // Notify event
-            eventNotificationManager.push(
-                    "/entities/" + type + "/" + id, // TODO
-                    Action.DELETE,
-                    null,
-                    null
+            eventNotificationManager.log(
+                    EventLogType.DELETE,
+                    timeService.now(),
+                    new String [] { ENTITIES, type, String.valueOf(id) },
+                    new Object[] {}
             );
         }
     }
@@ -122,12 +129,13 @@ public class EntityManagerBean implements EntityManager {
         boolean dataChanged = !existingData.equals(updatedData);
 
         if(dataChanged) {
+
             // Notify event
-            eventNotificationManager.push(
-                    "/entities/" + type + "/" + id, // TODO
-                    Action.UPDATE,
-                    null,
-                    data
+            eventNotificationManager.log(
+                    EventLogType.UPDATE,
+                    timeService.now(),
+                    new String [] { ENTITIES, type, String.valueOf(id) },
+                    new Object[] { existingData, updatedData }
             );
         }
 

@@ -1,19 +1,38 @@
 package com.restdatabus.business.api;
 
-import com.restdatabus.authorization.Action;
+import com.restdatabus.events.EventLog;
+import com.restdatabus.events.EventLogType;
+import com.restdatabus.model.service.EventLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
 
 @Service
 public class EventNotificationManagerBean implements EventNotificationManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventNotificationManagerBean.class);
 
+    @Autowired
+    private EventLogService eventLogService;
+
     @Override
-    public void push(String path, Action actionType, Object before, Object after) {
+    public void log(EventLogType logType, OffsetDateTime timestamp, String[] target, Object[] params) {
 
-        LOG.debug("push: path={} actionType={}\nbefore: {}\nafter: {}", path, actionType, before, after);
+        LOG.debug("> log: logType={} target={} params: {}", logType, target, Arrays.toString(params));
 
+        EventLog eventLog = new EventLog();
+        eventLog.setType(logType);
+        eventLog.setTimestamp(timestamp);
+        eventLog.setPaths(Arrays.asList(target));
+        eventLog.setParams(Arrays.asList(params));
+
+        EventLog persistedEventLog = eventLogService.create(eventLog);
+
+        LOG.debug("< log: {}", persistedEventLog);
     }
 }

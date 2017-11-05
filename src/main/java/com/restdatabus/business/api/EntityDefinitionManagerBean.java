@@ -1,10 +1,14 @@
 package com.restdatabus.business.api;
 
+import static com.restdatabus.events.EventLogTarget.*;
+
 import com.restdatabus.authorization.Action;
 import com.restdatabus.business.api.impl.InternalEntityDefinitionManagerImpl;
+import com.restdatabus.events.EventLogType;
 import com.restdatabus.model.data.dvo.EntityDefinitionData;
 import com.restdatabus.model.data.dvo.FieldDefinitionData;
 import com.restdatabus.model.data.dvo.FieldTypeData;
+import com.restdatabus.model.service.TimeService;
 import com.restdatabus.web.api.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,9 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
     @Autowired
     private AccessControlManager securityManager;
 
+    @Autowired
+    private TimeService timeService;
+
     @Override
     public EntityDefinitionData create(EntityDefinitionData data) {
 
@@ -41,11 +48,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         EntityDefinitionData persistedData = this.impl.create(data);
 
         // Notify event
-        eventNotificationManager.push(
-                "/definitions",
-                Action.CREATE,
-                null,
-                persistedData
+        eventNotificationManager.log(
+                EventLogType.CREATE,
+                timeService.now(),
+                new String [] { DEFINITIONS },
+                new Object[] { data, persistedData }
         );
 
         return persistedData;
@@ -78,11 +85,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         if(dataChanged) {
 
             // Notify event
-            eventNotificationManager.push(
-                    "/definitions", // TODO: + "/" + name
-                    Action.UPDATE,
-                    data,
-                    updatedData
+            eventNotificationManager.log(
+                    EventLogType.UPDATE,
+                    timeService.now(),
+                    new String [] { DEFINITIONS, name },
+                    new Object[] { existingData, updatedData }
             );
         }
 
@@ -103,11 +110,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         FieldDefinitionData fieldDefinitionData = this.impl.findByNameAndDefinition(name, field);
 
         // Notify event
-        eventNotificationManager.push(
-                "/definitions", // TODO: + "/" + name/fields
-                Action.READ,
-                null,
-                fieldDefinitionData // TODO: + name?
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { DEFINITIONS, name , FIELDS, field },
+                new Object[] {}
         );
 
         return fieldDefinitionData;
@@ -127,11 +134,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         FieldDefinitionData fieldDefinitionData = this.impl.createField(name, data);
 
         // Notify event
-        eventNotificationManager.push(
-                "/definitions", // TODO: + "/" + name/fields
-                Action.CREATE,
-                null,
-                fieldDefinitionData // TODO: + name?
+        eventNotificationManager.log(
+                EventLogType.CREATE,
+                timeService.now(),
+                new String [] { DEFINITIONS, name, FIELDS },
+                new Object[] { data, fieldDefinitionData }
         );
 
         return fieldDefinitionData;
@@ -157,11 +164,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         if(dataChanged) {
 
             // Notify event
-            eventNotificationManager.push(
-                    "/definitions", // TODO: + "/" + name/fields/data.name
-                    Action.UPDATE,
-                    existingField,
-                    updatedData // TODO: + name?
+            eventNotificationManager.log(
+                    EventLogType.UPDATE,
+                    timeService.now(),
+                    new String [] { DEFINITIONS, name, FIELDS, field },
+                    new Object[] { existingField, updatedData }
             );
         }
 
@@ -182,11 +189,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         List<FieldTypeData> fieldTypeDatas = this.impl.getFieldTypes();
 
         // Notify event
-        eventNotificationManager.push(
-                Constants.FIELD_TYPES,
-                Action.READ,
-                fieldTypeDatas,
-                fieldTypeDatas
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { FIELD_TYPES },
+                new Object[] {}
         );
 
         return fieldTypeDatas;
@@ -208,11 +215,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         if(deleted) {
 
             // Notify event
-            eventNotificationManager.push(
-                    "/definitions", // TODO: + "/" + name/fields/data.name
-                    Action.DELETE,
-                    name + "." + field, // TODO
-                    null
+            eventNotificationManager.log(
+                    EventLogType.DELETE,
+                    timeService.now(),
+                    new String [] { DEFINITIONS, name, FIELDS, field },
+                    new Object[] {}
             );
         }
     }
@@ -231,11 +238,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         EntityDefinitionData foundData = this.impl.findByName(name);
 
         // Notify event
-        eventNotificationManager.push(
-                "/definitions", // TODO: + "/" + name
-                Action.READ,
-                foundData,
-                foundData
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { DEFINITIONS, name },
+                new Object[] {}
         );
 
         return foundData;
@@ -255,11 +262,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         List<EntityDefinitionData> foundData = this.impl.findAll();
 
         // Notify event
-        eventNotificationManager.push(
-                "/definitions",
-                Action.READ,
-                foundData,
-                foundData
+        eventNotificationManager.log(
+                EventLogType.READ,
+                timeService.now(),
+                new String [] { DEFINITIONS },
+                new Object[] {}
         );
 
         return foundData;
@@ -281,11 +288,11 @@ public class EntityDefinitionManagerBean implements EntityDefinitionManager {
         if (deleted) {
 
             // Notify event
-            eventNotificationManager.push(
-                    "/definitions", // TODO: + "/" + name
-                    Action.DELETE,
-                    name,
-                    null
+            eventNotificationManager.log(
+                    EventLogType.DELETE,
+                    timeService.now(),
+                    new String [] { DEFINITIONS, name },
+                    new Object[] {}
             );
         }
     }
