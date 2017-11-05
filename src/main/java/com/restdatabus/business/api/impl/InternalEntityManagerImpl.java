@@ -38,7 +38,7 @@ public class InternalEntityManagerImpl {
 
         LOG.debug("create: {}", entityData);
 
-        checkEntityType(LOG, entityData);
+        checkEntityType(entityData);
 
         EntityDefinition entityDefinition = entityDefinitionService.findByName(entityData.getType());
 

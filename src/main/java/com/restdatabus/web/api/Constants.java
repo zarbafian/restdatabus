@@ -4,6 +4,9 @@ public class Constants {
 
     private Constants() {}
 
+    public static final String ID = "id";
+
+
     // Field types
     public static final String FIELD_TYPE_ENTITY = "entity";
 
@@ -29,4 +32,9 @@ public class Constants {
     public static final String ENTITIES = API + "/entities";
     public static final String ENTITIES_BY_TYPE = ENTITIES + "/{name}";
     public static final String ENTITY_BY_TYPE_AND_ID = ENTITIES_BY_TYPE + "/{id}";
+
+    // API - Reports
+    public static final String REPORTS = API + "/reports";
+    public static final String ENTITIES_REPORT = REPORTS + "/entities";
+    public static final String ENTITY_TYPE_REPORT = ENTITIES_REPORT + "/{name}";
 }
