@@ -27,6 +27,6 @@ public class Constants {
 
     // API - Entity
     public static final String ENTITIES = API + "/entities";
-    public static final String ENTITY_BY_ID = ENTITIES + "/{id}";
-    public static final String FILED_BY_ENTITY_AND_ID = ENTITIES + "/{id}/{name}";
+    public static final String ENTITIES_BY_TYPE = ENTITIES + "/{name}";
+    public static final String ENTITY_BY_TYPE_AND_ID = ENTITIES_BY_TYPE + "/{id}";
 }

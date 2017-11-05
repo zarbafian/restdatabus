@@ -27,14 +27,19 @@ public class EntityController {
     private EntityManager entityManager;
 
     @RequestMapping(
-            value = ENTITIES,
+            value = ENTITIES_BY_TYPE,
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<EntityData> create(@RequestBody EntityData entityData) {
+    public ResponseEntity<EntityData> create(
+            @PathVariable(value = "name") String type,
+            @RequestBody EntityData entityData
+    ) {
 
-        LOG.debug("create - {} -> {}", entityData.getType(), entityData.getData());
+        LOG.debug("create - {} -> {}", type, entityData.getData());
+
+        entityData.setType(type);
 
         EntityData persistedEntity =  entityManager.create(entityData);
 
@@ -42,11 +47,11 @@ public class EntityController {
     }
 
     @RequestMapping(
-            value = ENTITIES,
+            value = ENTITIES_BY_TYPE,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<EntityData>> getByType(@RequestParam(value = "type") String type) {
+    public ResponseEntity<List<EntityData>> getByType(@PathVariable(value = "name") String type) {
 
         LOG.debug("getByType - {}", type);
 
@@ -56,11 +61,11 @@ public class EntityController {
     }
 
     @RequestMapping(
-            value = ENTITY_BY_ID,
+            value = ENTITY_BY_TYPE_AND_ID,
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<EntityData> getByTypeAndId(@PathVariable(value = "id") Long id, @RequestParam(value = "type") String type) {
+    public ResponseEntity<EntityData> getByTypeAndId(@PathVariable(value = "name") String type, @PathVariable(value = "id") Long id) {
 
         LOG.debug("getByTypeAndId - {}", type);
 
@@ -70,10 +75,10 @@ public class EntityController {
     }
 
     @RequestMapping(
-            value = ENTITY_BY_ID,
+            value = ENTITY_BY_TYPE_AND_ID,
             method = RequestMethod.DELETE
     )
-    public ResponseEntity<Void> deleteById(@PathVariable(value = "id") Long id, @RequestParam(value = "type") String type) {
+    public ResponseEntity<Void> deleteById(@PathVariable(value = "name") String type, @PathVariable(value = "id") Long id) {
 
         LOG.debug("deleteById: {}, id", type);
 
@@ -82,17 +87,17 @@ public class EntityController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-
     @RequestMapping(
-            value = ENTITY_BY_ID,
+            value = ENTITY_BY_TYPE_AND_ID,
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<EntityData> update(@PathVariable(value = "id") Long id, @RequestParam(value = "type") String type, @RequestBody EntityData data) {
+    public ResponseEntity<EntityData> update(@PathVariable(value = "name") String type, @PathVariable(value = "id") Long id, @RequestBody EntityData data) {
 
-        LOG.debug("update: {}, {}", id, data);
+        LOG.debug("update: {}/{} -> {}", id, type, data);
+
+        data.setType(type);
 
         EntityData updatedData = entityManager.update(type, id, data);
 
