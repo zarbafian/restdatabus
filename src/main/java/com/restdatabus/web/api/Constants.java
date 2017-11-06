@@ -1,11 +1,16 @@
 package com.restdatabus.web.api;
 
+import java.time.ZoneId;
+
 public class Constants {
 
     private Constants() {}
 
-    public static final String ID = "id";
+    // TODO: FIXME
+    public static final ZoneId TIME_ZONE = ZoneId.of("Europe/Paris");
 
+
+    public static final String ID = "id";
 
     // Field types
     public static final String FIELD_TYPE_ENTITY = "entity";
@@ -37,4 +42,7 @@ public class Constants {
     public static final String REPORTS = API + "/reports";
     public static final String ENTITIES_REPORT = REPORTS + "/entities";
     public static final String ENTITY_TYPE_REPORT = ENTITIES_REPORT + "/{name}";
+
+    // API - Event logs
+    public static final String EVENTS = API + "/events";
 }

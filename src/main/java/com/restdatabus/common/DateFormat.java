@@ -1,11 +1,14 @@
 package com.restdatabus.common;
 
+import com.restdatabus.web.api.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class DateFormat {
 
@@ -65,7 +68,7 @@ public class DateFormat {
             LocalDateTime dateTime = LocalDateTime.of(year, month, day, hours, minutes, seconds);
 
             // TODO: FIXME
-            long time = dateTime.atZone(ZoneId.of("Europe/Paris")).toInstant().toEpochMilli();
+            long time = dateTime.atZone(Constants.TIME_ZONE).toInstant().toEpochMilli();
 
             System.out.print("time: " + time);
 
@@ -78,5 +81,10 @@ public class DateFormat {
         LOG.debug("parseDate: {} -> {}", value, date);
 
         return date;
+    }
+
+    public static String formatDatetime (OffsetDateTime dateTime) {
+
+        return dateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 }

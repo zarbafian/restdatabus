@@ -1,10 +1,12 @@
 package com.restdatabus.model.data.transform;
 
 import com.restdatabus.common.DateFormat;
+import com.restdatabus.events.EventLog;
 import com.restdatabus.model.data.DataType;
 import com.restdatabus.model.data.Entity;
 import com.restdatabus.model.data.Field;
 import com.restdatabus.model.data.dvo.EntityData;
+import com.restdatabus.model.data.dvo.EventLogData;
 import com.restdatabus.model.data.types.FieldFactory;
 import com.restdatabus.model.meta.EntityDefinition;
 import com.restdatabus.model.meta.FieldDefinition;
@@ -83,6 +85,18 @@ public class EntityObjectMapper {
         data.setData(fields);
 
         LOG.debug("< toDataObject: {}", data);
+
+        return data;
+    }
+
+    public EventLogData toDataObject(EventLog eventLog) {
+
+        EventLogData data = new EventLogData();
+        data.setId(eventLog.getId());
+        data.setAction(eventLog.getType().getValue());
+        data.setTimestamp(DateFormat.formatDatetime(eventLog.getTimestamp()));
+        data.setTarget(eventLog.getPaths().toString());
+        data.setParams(eventLog.getParams().toString());
 
         return data;
     }

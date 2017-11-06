@@ -22,4 +22,22 @@ public enum EventLogType {
     public String toString() {
         return value;
     }
+
+    public static EventLogType fromValue(String value) {
+
+        switch (value) {
+            case "create":
+                return CREATE;
+            case "read":
+                return READ;
+            case "update":
+                return UPDATE;
+            case "delete":
+                return DELETE;
+            case "execute":
+                return EXECUTE;
+            default:
+                throw new IllegalArgumentException("unknown value for event log type: " + value);
+        }
+    }
 }
